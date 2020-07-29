@@ -20,13 +20,13 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
 
 @Entity
-@Table(name = "visitor_timeslots")
+@Table(name = "timeslots")
 @Data
 public class TimeSlot {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private long id;
+	private int timeslotId;
 	
 	@DateTimeFormat(pattern = "yyyy-MM-dd HH:mm", iso = ISO.DATE_TIME)
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm")
@@ -37,9 +37,9 @@ public class TimeSlot {
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm")
 	private LocalDateTime endtime;
 	
-	@ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
-    @JoinColumn(name="id",referencedColumnName="timeslotId")
- 	private VisitorMappings timeslotId;
+//	@ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+//    @JoinColumn(name="id",referencedColumnName="timeslotId")
+// 	private VisitorMappings timeslotId;
 	
 	
 }

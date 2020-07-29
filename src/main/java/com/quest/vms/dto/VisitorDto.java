@@ -18,7 +18,7 @@ import lombok.Data;
 public class VisitorDto {
 	
 	@JsonIgnore
-	private long id;
+	private int id;
 	private long contactNo;
 	private String email;
 	private String firstName;
@@ -37,6 +37,5 @@ public class VisitorDto {
 	private List<ContactPersonDto> contactPerson;
 	private List<TimeSlotDto> timeSlot;
 	private List<DeviceDto> device;
-	private List<VisitorMappingsDto> visitorMappings;
 
 }

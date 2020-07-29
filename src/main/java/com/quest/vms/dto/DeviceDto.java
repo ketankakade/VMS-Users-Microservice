@@ -8,7 +8,7 @@ import lombok.Data;
 public class DeviceDto {
 	
 	@JsonIgnore
-	private long id;	
+	private int id;	
 	private String deviceSN;
 	private String deviceType;
 	private String deviceMake;

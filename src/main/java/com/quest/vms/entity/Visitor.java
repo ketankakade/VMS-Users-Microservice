@@ -32,7 +32,7 @@ public class Visitor {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)	
-	private long id;
+	private int id;
 
 	@NotNull
 	private String firstName;
@@ -71,8 +71,8 @@ public class Visitor {
 	
 	//image
 		
-	@ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
-    @JoinColumn(name="id",referencedColumnName="visitorId")
- 	private VisitorMappings visitorId;
+//	@ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+//    @JoinColumn(name="id",referencedColumnName="visitorId")
+// 	private VisitorMappings visitorId;
 	
 }

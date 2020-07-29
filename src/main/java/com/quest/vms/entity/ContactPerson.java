@@ -21,13 +21,13 @@ import lombok.Data;
 
 
 @Entity
-@Table(name = "visitor_contact_person")
+@Table(name = "contactperson")
 @Data
 public class ContactPerson {
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)	
-	private long id;
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private int contactpersonid;
 
 	@NotBlank
 	private String firstName;
@@ -43,12 +43,8 @@ public class ContactPerson {
 	@Email
 	@Column(name = "email")
 	private String email;
-	
-	@ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
-    @JoinColumn(name="id",referencedColumnName="contactPersonId")
- 	private VisitorMappings contactPersonId;
-	
-//	@JsonIgnore
-//	@ManyToOne(cascade = CascadeType.ALL)
-//	private User user;
+
+//	@ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+//    @JoinColumn(name="id",referencedColumnName="contactPersonId")
+// 	private VisitorMappings contactPersonId;
 }

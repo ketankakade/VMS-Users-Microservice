@@ -2,24 +2,22 @@ package com.quest.vms.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.quest.vms.entity.ContactPerson;
+import com.quest.vms.entity.Visitor;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
+
 
 import lombok.Data;
 
 @Data
 @JsonInclude(value = Include.NON_NULL)
-
-public class ContactPersonDto {
+public class ContactPersonMappingDto {
 	
-	@JsonIgnore
-	private int contactPersonId;
-
-	private String firstName;
 	
-	private String lastName;
-
-	private long contactNo;
+	private Visitor visitorId;	
 	
-	private String email;
+	private ContactPerson contactPersonId;
+
+
 
 }

@@ -14,7 +14,7 @@ import lombok.Data;
 public class TimeSlotDto {
 
 	@JsonIgnore
-	private long id;
+	private int timeslotid;
 	
 	@DateTimeFormat(pattern = "yyyy-MM-dd HH:mm", iso = ISO.DATE_TIME)
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm")

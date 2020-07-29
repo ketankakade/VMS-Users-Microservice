@@ -13,13 +13,13 @@ import javax.persistence.Table;
 import lombok.Data;
 
 @Entity
-@Table(name = "visitor_devices")
+@Table(name = "devices")
 @Data
 public class Device {
 
 	@Id	
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private long id;
+	private int deviceId;
 	
 	private String deviceSN;
 	
@@ -27,8 +27,8 @@ public class Device {
 	
 	private String deviceMake;
 	
-	@ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
-    @JoinColumn(name="id",referencedColumnName="deviceId")
- 	private VisitorMappings deviceId;
+//	@ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+//    @JoinColumn(name="id",referencedColumnName="deviceId")
+// 	private VisitorMappings deviceId;
 	
 }
