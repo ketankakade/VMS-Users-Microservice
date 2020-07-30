@@ -36,9 +36,7 @@ public class UserController {
 	@PostMapping("/create")
 	public ResponseEntity<?> create(@Valid @RequestBody VisitorDto user) {
 		VisitorDto userDto = null;
-
 		try {
-			
 			System.out.println("enterd in controller");
 			userDto = userService.create(user);
 		} catch (Exception e) {

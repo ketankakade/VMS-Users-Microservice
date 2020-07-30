@@ -1,10 +1,8 @@
 package com.quest.vms.service;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -21,77 +19,76 @@ import com.quest.vms.entity.Device;
 import com.quest.vms.entity.TimeSlot;
 import com.quest.vms.entity.Visitor;
 
+import lombok.extern.slf4j.Slf4j;
+
 @Service
+@Slf4j
 public class UserService implements IUserService {
 
-	private static final Logger logger = LogManager.getLogger(UserService.class);
-	
 	@Autowired
 	IUserDao userDao;
 
 	@Override
-	public VisitorDto create(VisitorDto userDto)throws InternalServerError {
+	public VisitorDto create(final VisitorDto userDto) throws InternalServerError {
+		log.info("save user");
+		Set<ContactPerson> cpSet = new HashSet<ContactPerson>();
+		Set<Device> dSet = new HashSet<Device>();
+		Set<TimeSlot> tSet = new HashSet<TimeSlot>();
+		for (ContactPersonDto p : userDto.getContactPerson()) {
+			ContactPerson cp = new ContactPerson();
+			cp.setContactNo(p.getContactNo());
+			cp.setEmail(p.getEmail());
+			cp.setFirstName(p.getFirstName());
+			cp.setLastName(p.getLastName());
+			cpSet.add(cp);
+		}
 
+		for (DeviceDto d : userDto.getDevice()) {
+			Device device = new Device();
+			device.setDeviceMake(d.getDeviceMake());
+			device.setDeviceSN(d.getDeviceSN());
+			device.setDeviceType(d.getDeviceType());
+			dSet.add(device);
+		}
 
-		ModelMapper modelMapper = new ModelMapper();
-		Visitor user = modelMapper.map(userDto, Visitor.class);
-//		User user = new User();
-//		user.setFirstName(userDto.getFirstName());
-//		user.setLastName(userDto.getLastName());
-//		user.setEmail(userDto.getEmail());
-//		user.setContactNo(userDto.getContactNo());
-//		user.setIdProof(userDto.getIdProof());
-//		user.setVisitorType(userDto.getVisitorType());
-//		user.setReasonForVisit(userDto.getReasonForVisit());
-//		user.setContactPerson(userDto.getContactPerson());
-//		user.setTimeSlot(userDto.getTimeSlot());
-//		user.setDevice(userDto.getDevice());
-		
-		
-		if(userDao.save(user)==null)
+		for (TimeSlotDto t : userDto.getTimeSlot()) {
+			TimeSlot ts = new TimeSlot();
+			ts.setEndtime(t.getEndTime());
+			ts.setStartTime(t.getStartTime());
+			tSet.add(ts);
+		}
+
+		Visitor visitor = new Visitor();
+		visitor.setEmail(userDto.getEmail());
+		visitor.setContactNo(userDto.getContactNo());
+		visitor.setFirstName(userDto.getFirstName());
+		visitor.setReasonForVisit(userDto.getReasonForVisit());
+		visitor.setContactPersons(cpSet);
+		visitor.setDevices(dSet);
+		visitor.setTimeSlots(tSet);
+
+		if (userDao.save(visitor) == null)
 			throw new InternalServerError("Error While saving data");
-		
 		return userDto;
 	}
 
 	@Override
 	public VisitorDto getUserById(long id) throws RecordNotFoundException {
-	
 		Visitor user = userDao.getUserById(id);
-		if(user==null)
+		if (user == null)
 			throw new RecordNotFoundException("Record not found with given ID");
-		
-		
 		ModelMapper modelMapper = new ModelMapper();
 		VisitorDto userDto = modelMapper.map(user, VisitorDto.class);
-		
-//		UserDto userDto = new UserDto();
-//		userDto.setFirstName(user.getFirstName());
-//		userDto.setLastName(user.getLastName());
-//		userDto.setEmail(user.getEmail());
-//		userDto.setContactNo(user.getContactNo());
-//		userDto.setIdProof(user.getIdProof());
-//		userDto.setVisitorType(user.getVisitorType());
-//		userDto.setReasonForVisit(user.getReasonForVisit());
-//		userDto.setContactPerson(user.getContactPerson());
-//		userDto.setTimeSlot(user.getTimeSlot());
-//		userDto.setDevice(user.getDevice());
-		
 		return userDto;
 	}
 
-
-
 	@Override
-	public void delete(long id) throws RecordNotFoundException{
+	public void delete(long id) throws RecordNotFoundException {
 		Visitor userToBeDeleted = null;
-		
-			userToBeDeleted = userDao.getUserById(id);
-			
-			if (userToBeDeleted == null)
-				throw new RecordNotFoundException("Record not found with id: " + id);
-			
-			userDao.delete(userToBeDeleted);	
+		userToBeDeleted = userDao.getUserById(id);
+		if (userToBeDeleted == null)
+			throw new RecordNotFoundException("Record not found with id: " + id);
+		userDao.delete(userToBeDeleted);
 	}
-	
+
 }

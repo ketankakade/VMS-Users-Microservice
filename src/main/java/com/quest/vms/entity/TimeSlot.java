@@ -37,9 +37,4 @@ public class TimeSlot {
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm")
 	private LocalDateTime endtime;
 	
-//	@ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
-//    @JoinColumn(name="id",referencedColumnName="timeslotId")
-// 	private VisitorMappings timeslotId;
-	
-	
 }

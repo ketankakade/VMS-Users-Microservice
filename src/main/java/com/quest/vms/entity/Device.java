@@ -27,8 +27,4 @@ public class Device {
 	
 	private String deviceMake;
 	
-//	@ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
-//    @JoinColumn(name="id",referencedColumnName="deviceId")
-// 	private VisitorMappings deviceId;
-	
 }
