@@ -4,22 +4,22 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.quest.vms.entity.Visitor;
-import com.quest.vms.repository.UserRepository;
+import com.quest.vms.repository.VisitorRepository;
 
 @Service
-public class UserDao implements IUserDao {
+public class VisitorDao implements IVisitorDao {
 	
 	@Autowired
-	UserRepository userRepo;
+	VisitorRepository visitorRepo;
 	
 	@Override
-	public Visitor save(Visitor user){
-		return userRepo.save(user);
+	public Visitor save(Visitor visitor){
+		return visitorRepo.save(visitor);
 	}
 
 	@Override
-	public Visitor getUserById(long id) {
-		return userRepo.findById(id);
+	public Visitor getVisitorById(long id) {
+		return visitorRepo.findById(id);
 	}
 
 //	@Override
@@ -29,7 +29,7 @@ public class UserDao implements IUserDao {
 //	}
 
 	@Override
-	public void delete(Visitor user) {
-		userRepo.delete(user);
+	public void delete(Visitor visitor) {
+		visitorRepo.delete(visitor);
 	}	
 }

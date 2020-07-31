@@ -25,7 +25,7 @@ public class Swagger2Config {
     }
     private ApiInfo apiEndPointsInfo() {
         return new ApiInfoBuilder().title("Visitor Management System Spring Boot REST API's")
-            .description("VMS REST API's")
+            .description("VMS VISITOR Microservice REST API's")
             .contact(new Contact("", "www.quest-global.com", "test@123.com"))
             .license("Apache 2.0")
             .licenseUrl("http://www.apache.org/licenses/LICENSE-2.0.html")

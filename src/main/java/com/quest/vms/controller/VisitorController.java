@@ -17,54 +17,54 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.quest.vms.customexception.RecordNotFoundException;
 import com.quest.vms.dto.VisitorDto;
-import com.quest.vms.service.IUserService;
+import com.quest.vms.service.IVisitorService;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 
 @RestController
-@RequestMapping("/" + USER_URL_PATH)
+@RequestMapping("/" + VISITOR_URL_PATH)
 @Api(value = "Visitor Management System", description = "Operations pertaining to Visitor Management System")
 @Slf4j
-public class UserController {
+public class VisitorController {
 
 	@Autowired
-	IUserService userService;
+	IVisitorService visitorService;
 
-	@ApiOperation(value = "Add a User to system")
-	@PostMapping(CREATE_USER)
-	public ResponseEntity<?> create(@Valid @RequestBody VisitorDto user) {
+	@ApiOperation(value = "Add a Visitor to system")
+	@PostMapping(CREATE_VISITOR)
+	public ResponseEntity<?> create(@Valid @RequestBody VisitorDto visitor) {
 		VisitorDto userDto = null;
 		try {
-			userDto = userService.create(user);
+			userDto = visitorService.create(visitor);
 		} catch (Exception e) {
-			log.error("error while saving user");
+			log.error("error while saving Visitor");
 			return new ResponseEntity<String>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 		return new ResponseEntity<VisitorDto>(userDto, HttpStatus.OK);
 	}
 
-	@ApiOperation(value = "Get User by Id")
-	@GetMapping(GET_USER + "/{id}")
+	@ApiOperation(value = "Get Visitor by Id")
+	@GetMapping(GET_VISITOR + "/{id}")
 	public ResponseEntity<?> get(@PathVariable(value = "id") long id) {
-		VisitorDto userDto;
+		VisitorDto visitorDto;
 		try {
-			userDto = userService.getUserById(id);
+			visitorDto = visitorService.getvisitorById(id);
 		} catch (RecordNotFoundException e) {
-			log.error("error while fetching user");
+			log.error("error while fetching visitor");
 			return new ResponseEntity<String>(e.getMessage(), HttpStatus.BAD_REQUEST);
 		}
-		return ResponseEntity.ok().body(userDto);
+		return ResponseEntity.ok().body(visitorDto);
 	}
 
-	@ApiOperation(value = "Delete User from system")
-	@DeleteMapping(DELETE_USER + "/{id}")
+	@ApiOperation(value = "Delete Visitor from system")
+	@DeleteMapping(DELETE_VISITOR + "/{id}")
 	public ResponseEntity<?> delete(@PathVariable(value = "id") int id) {
 		try {
-			userService.delete(id);
+			visitorService.delete(id);
 		} catch (Exception e) {
-			log.error("error while deleting user");
+			log.error("error while deleting visitor");
 			return new ResponseEntity<String>(e.getMessage(), HttpStatus.BAD_REQUEST);
 		}
 		return new ResponseEntity<String>("success", HttpStatus.OK);

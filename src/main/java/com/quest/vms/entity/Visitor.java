@@ -35,6 +35,7 @@ public class Visitor {
 	@NotNull
 	private String firstName;
 
+	@NotNull
 	private String lastName;
 
 	@NotNull
