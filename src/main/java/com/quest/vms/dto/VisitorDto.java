@@ -10,19 +10,25 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
+
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 @JsonInclude(value = Include.NON_NULL)
-
 public class VisitorDto {
-	
+
 	@JsonIgnore
 	private int id;
 	private long contactNo;
 	private String email;
 	private String firstName;
-	private String lastName;	
+	private String lastName;
 	private String idProof;
 	private String placeOfVisit;
 	private String reasonForVisit;
@@ -33,7 +39,7 @@ public class VisitorDto {
 	@DateTimeFormat(pattern = "yyyy-MM-dd HH:mm", iso = ISO.DATE_TIME)
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm")
 	private LocalDateTime updatedOn;
-	
+
 	private List<ContactPersonDto> contactPerson;
 	private List<TimeSlotDto> timeSlot;
 	private List<DeviceDto> device;

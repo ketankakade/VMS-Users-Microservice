@@ -1,5 +1,8 @@
 package com.quest.vms.dao;
 
+import java.util.List;
+import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -8,28 +11,34 @@ import com.quest.vms.repository.VisitorRepository;
 
 @Service
 public class VisitorDao implements IVisitorDao {
-	
-	@Autowired
-	VisitorRepository visitorRepo;
-	
-	@Override
-	public Visitor save(Visitor visitor){
-		return visitorRepo.save(visitor);
-	}
+
+	@Autowired VisitorRepository visotorRepository;
 
 	@Override
-	public Visitor getVisitorById(long id) {
-		return visitorRepo.findById(id);
+	public Visitor save(Visitor visitor) {
+		return visotorRepository.save(visitor);
 	}
-
-//	@Override
-//	public User update(int id, User user) throws InternalServerError {
-//		// TODO Auto-generated method stub
-//		return null;
-//	}
 
 	@Override
 	public void delete(Visitor visitor) {
-		visitorRepo.delete(visitor);
-	}	
+		visotorRepository.delete(visitor);
+	}
+
+	@Override
+	public Visitor getVisitorById(Integer id) {
+		Optional<Visitor> visitor = visotorRepository.findById(id);
+		Visitor vis = Visitor.builder().id(visitor.get().getId()).firstName(visitor.get().getFirstName())
+				.lastName(visitor.get().getLastName()).contactNo(visitor.get().getContactNo())
+				.email(visitor.get().getEmail()).placeOfVisit(visitor.get().getPlaceOfVisit())
+				.idProof(visitor.get().getIdProof()).reasonForVisit(visitor.get().getReasonForVisit())
+				.createdOn(visitor.get().getCreatedOn()).contactPersons(visitor.get().getContactPersons())
+				.devices(visitor.get().getDevices()).timeSlots(visitor.get().getTimeSlots()).build();
+		return vis;
+	}
+
+	@Override
+	public List<Visitor> listVisitors() {
+		// TODO Auto-generated method stub
+		return visotorRepository.findAll();
+	}
 }

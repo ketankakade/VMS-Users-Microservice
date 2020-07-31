@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.quest.vms.customexception.RecordNotFoundException;
+import com.quest.vms.common.utils.GenericResponse;
 import com.quest.vms.dto.VisitorDto;
 import com.quest.vms.service.IVisitorService;
 
@@ -45,22 +45,32 @@ public class VisitorController {
 		return new ResponseEntity<VisitorDto>(userDto, HttpStatus.OK);
 	}
 
-	@ApiOperation(value = "Get Visitor by Id")
-	@GetMapping(GET_VISITOR + "/{id}")
-	public ResponseEntity<?> get(@PathVariable(value = "id") long id) {
-		VisitorDto visitorDto;
+	@ApiOperation(value = "Get User by Id")
+	@GetMapping(GET_VISITOR + "/{" + ID + "}")
+	public ResponseEntity<GenericResponse<VisitorDto>> getVisitorById(@PathVariable(value = ID) Integer id) {
 		try {
-			visitorDto = visitorService.getvisitorById(id);
-		} catch (RecordNotFoundException e) {
-			log.error("error while fetching visitor");
-			return new ResponseEntity<String>(e.getMessage(), HttpStatus.BAD_REQUEST);
+			GenericResponse<VisitorDto> getVisitorGenericRes = visitorService.getVisitorById(id);
+			return ResponseEntity.status(getVisitorGenericRes.getMessageCode()).body(getVisitorGenericRes);
+		} catch (Exception e) {
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
 		}
-		return ResponseEntity.ok().body(visitorDto);
+	}
+
+	@ApiOperation(value = "Get All visistors from system")
+	@GetMapping(LIST_VISITOR)
+	public ResponseEntity<GenericResponse<VisitorDto>> listVisitors() {
+		log.info("list visitor");
+		try {
+			GenericResponse<VisitorDto> listVisitorGenericRes = visitorService.listVisitors();
+			return ResponseEntity.status(listVisitorGenericRes.getMessageCode()).body(listVisitorGenericRes);
+		} catch (Exception e) {
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+		}
 	}
 
 	@ApiOperation(value = "Delete Visitor from system")
 	@DeleteMapping(DELETE_VISITOR + "/{id}")
-	public ResponseEntity<?> delete(@PathVariable(value = "id") int id) {
+	public ResponseEntity<?> delete(@PathVariable(value = "id") Integer id) {
 		try {
 			visitorService.delete(id);
 		} catch (Exception e) {
