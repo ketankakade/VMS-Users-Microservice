@@ -21,7 +21,7 @@ public class Device {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private int deviceId;
+	private Integer deviceId;
 
 	private String deviceSN;
 

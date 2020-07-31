@@ -12,7 +12,8 @@ import com.quest.vms.repository.VisitorRepository;
 @Service
 public class VisitorDao implements IVisitorDao {
 
-	@Autowired VisitorRepository visotorRepository;
+	@Autowired
+	VisitorRepository visotorRepository;
 
 	@Override
 	public Visitor save(Visitor visitor) {
@@ -26,13 +27,16 @@ public class VisitorDao implements IVisitorDao {
 
 	@Override
 	public Visitor getVisitorById(Integer id) {
+		Visitor vis = null;
 		Optional<Visitor> visitor = visotorRepository.findById(id);
-		Visitor vis = Visitor.builder().id(visitor.get().getId()).firstName(visitor.get().getFirstName())
-				.lastName(visitor.get().getLastName()).contactNo(visitor.get().getContactNo())
-				.email(visitor.get().getEmail()).placeOfVisit(visitor.get().getPlaceOfVisit())
-				.idProof(visitor.get().getIdProof()).reasonForVisit(visitor.get().getReasonForVisit())
-				.createdOn(visitor.get().getCreatedOn()).contactPersons(visitor.get().getContactPersons())
-				.devices(visitor.get().getDevices()).timeSlots(visitor.get().getTimeSlots()).build();
+		if (visitor.isPresent()) {
+			vis = Visitor.builder().id(visitor.get().getId()).firstName(visitor.get().getFirstName())
+					.lastName(visitor.get().getLastName()).contactNo(visitor.get().getContactNo())
+					.email(visitor.get().getEmail()).placeOfVisit(visitor.get().getPlaceOfVisit())
+					.idProof(visitor.get().getIdProof()).reasonForVisit(visitor.get().getReasonForVisit())
+					.createdOn(visitor.get().getCreatedOn()).contactPersons(visitor.get().getContactPersons())
+					.devices(visitor.get().getDevices()).timeSlots(visitor.get().getTimeSlots()).build();
+		}
 		return vis;
 	}
 

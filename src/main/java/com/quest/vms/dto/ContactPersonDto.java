@@ -17,7 +17,7 @@ import lombok.NoArgsConstructor;
 public class ContactPersonDto {
 	
 	@JsonIgnore
-	private int contactPersonId;
+	private Integer contactPersonId;
 
 	private String firstName;
 	

@@ -24,7 +24,7 @@ import lombok.NoArgsConstructor;
 public class VisitorDto {
 
 	@JsonIgnore
-	private int id;
+	private Integer id;
 	private long contactNo;
 	private String email;
 	private String firstName;

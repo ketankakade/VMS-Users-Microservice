@@ -25,7 +25,7 @@ public class ContactPerson {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private int contactpersonid;
+	private Integer contactpersonid;
 
 	@NotBlank
 	private String firstName;

@@ -36,7 +36,7 @@ public class Visitor {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private int id;
+	private Integer id;
 
 	@NotNull
 	private String firstName;
@@ -45,7 +45,6 @@ public class Visitor {
 	private String lastName;
 
 	@NotNull
-	@Column(unique = true)
 	@Email
 	private String email;
 

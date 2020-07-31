@@ -1,5 +1,6 @@
 package com.quest.vms.service;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
@@ -11,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
+import com.quest.vms.common.utils.ErrorCodes;
 import com.quest.vms.common.utils.GenericResponse;
 import com.quest.vms.customexception.InternalServerError;
 import com.quest.vms.customexception.RecordNotFoundException;
@@ -37,42 +39,7 @@ public class VisitorService implements IVisitorService {
 	@Override
 	public VisitorDto create(final VisitorDto visitorDto) throws InternalServerError {
 		log.info("save visitor");
-		Set<ContactPerson> contactPersonSet = new HashSet<ContactPerson>();
-		Set<Device> deviceSet = new HashSet<Device>();
-		Set<TimeSlot> timeslotSet = new HashSet<TimeSlot>();
-		for (ContactPersonDto p : visitorDto.getContactPerson()) {
-			ContactPerson cp = new ContactPerson();
-			cp.setContactNo(p.getContactNo());
-			cp.setEmail(p.getEmail());
-			cp.setFirstName(p.getFirstName());
-			cp.setLastName(p.getLastName());
-			contactPersonSet.add(cp);
-		}
-
-		for (DeviceDto d : visitorDto.getDevice()) {
-			Device device = new Device();
-			device.setDeviceMake(d.getDeviceMake());
-			device.setDeviceSN(d.getDeviceSN());
-			device.setDeviceType(d.getDeviceType());
-			deviceSet.add(device);
-		}
-
-		for (TimeSlotDto t : visitorDto.getTimeSlot()) {
-			TimeSlot ts = new TimeSlot();
-			ts.setEndtime(t.getEndTime());
-			ts.setStartTime(t.getStartTime());
-			timeslotSet.add(ts);
-		}
-
-		Visitor visitor = new Visitor();
-		visitor.setEmail(visitorDto.getEmail());
-		visitor.setContactNo(visitorDto.getContactNo());
-		visitor.setFirstName(visitorDto.getFirstName());
-		visitor.setReasonForVisit(visitorDto.getReasonForVisit());
-		visitor.setContactPersons(contactPersonSet);
-		visitor.setDevices(deviceSet);
-		visitor.setTimeSlots(timeslotSet);
-
+		Visitor visitor = transformDtoToEntity(visitorDto);
 		if (visitorDao.save(visitor) == null)
 			throw new InternalServerError("Error While saving data");
 		return visitorDto;
@@ -80,7 +47,8 @@ public class VisitorService implements IVisitorService {
 
 	@Override
 	public GenericResponse<VisitorDto> getVisitorById(Integer visitorId) {
-		GenericResponse<VisitorDto> genericRes = new GenericResponse<VisitorDto>();
+		GenericResponse<VisitorDto> genericRes = new GenericResponse<>(ErrorCodes.BAD_REQUEST_STATUS_CODE,
+				"BAD_REQUEST", null, null);
 		Visitor visitor = visitorDao.getVisitorById(visitorId);
 		if (visitor != null) {
 			VisitorDto visitorDTO = transformEntityToDto(visitor);
@@ -89,7 +57,6 @@ public class VisitorService implements IVisitorService {
 			genericRes.setData(Collections.singletonList(visitorDTO));
 		} else {
 			genericRes.setErrorCode("400");
-			genericRes.setMessage("get visitor failed");
 		}
 		return genericRes;
 	}
@@ -99,10 +66,7 @@ public class VisitorService implements IVisitorService {
 		GenericResponse<VisitorDto> genericRes = new GenericResponse<VisitorDto>();
 		List<VisitorDto> visitorDTOList = new ArrayList<>();
 		List<Visitor> listedVisitors = visitorDao.listVisitors();
-		if (listedVisitors.isEmpty()) {
-			genericRes.setErrorCode("400");
-			genericRes.setMessage("get visitor list failed");
-		} else {
+		if (!listedVisitors.isEmpty()) {
 			for (Visitor vis : listedVisitors) {
 				VisitorDto visitorDTO = transformEntityToDto(vis);
 				visitorDTOList.add(visitorDTO);
@@ -110,6 +74,10 @@ public class VisitorService implements IVisitorService {
 			genericRes.setMessageCode(HttpStatus.OK.value());
 			genericRes.setMessage("Success");
 			genericRes.setData(visitorDTOList);
+		} else {
+			genericRes.setErrorCode("400");
+			genericRes.setMessage("get visitor list failed");
+			return genericRes;
 		}
 		return genericRes;
 	}
@@ -123,12 +91,61 @@ public class VisitorService implements IVisitorService {
 		visitorDao.delete(visitorToBeDeleted);
 	}
 
-	public Visitor transformDtoToEntity(VisitorDto dto) {
-		return modelMapper.map(dto, Visitor.class);
+	public Visitor transformDtoToEntity(VisitorDto visitorDto) {
+		Set<ContactPerson> contactPersonSet = new HashSet<ContactPerson>();
+		Set<Device> deviceSet = new HashSet<Device>();
+		Set<TimeSlot> timeslotSet = new HashSet<TimeSlot>();
+		for (ContactPersonDto p : visitorDto.getContactPerson()) {
+			ContactPerson cp = ContactPerson.builder().contactNo(p.getContactNo()).email(p.getEmail())
+					.firstName(p.getFirstName()).lastName(p.getLastName()).build();
+			contactPersonSet.add(cp);
+		}
+		for (DeviceDto d : visitorDto.getDevice()) {
+			Device device = Device.builder().deviceMake(d.getDeviceMake()).deviceSN(d.getDeviceSN())
+					.deviceType(d.getDeviceType()).build();
+			deviceSet.add(device);
+		}
+		for (TimeSlotDto t : visitorDto.getTimeSlot()) {
+			TimeSlot ts = TimeSlot.builder().endtime(t.getEndTime()).startTime(t.getStartTime()).build();
+			timeslotSet.add(ts);
+		}
+		Visitor visitor = Visitor.builder().email(visitorDto.getEmail()).contactNo(visitorDto.getContactNo())
+				.firstName(visitorDto.getFirstName())
+				.lastName(visitorDto.getLastName())
+				.idProof(visitorDto.getIdProof())
+				.reasonForVisit(visitorDto.getReasonForVisit())
+				.placeOfVisit(visitorDto.getPlaceOfVisit())
+				.createdOn(LocalDateTime.now())
+				.contactPersons(contactPersonSet).devices(deviceSet).timeSlots(timeslotSet)
+				.build();
+		return visitor;
 	}
 
 	public VisitorDto transformEntityToDto(Visitor entity) {
-		return modelMapper.map(entity, VisitorDto.class);
+		List<ContactPersonDto> contactPersonDtoList = new ArrayList<>();
+		List<DeviceDto> deviceDtoList = new ArrayList<>();
+		List<TimeSlotDto> tomeSlotDtoList = new ArrayList<>();
+		for (ContactPerson cp : entity.getContactPersons()) {
+			ContactPersonDto contactPersonDto = ContactPersonDto.builder().contactPersonId(cp.getContactpersonid())
+					.email(cp.getEmail()).firstName(cp.getFirstName()).lastName(cp.getLastName())
+					.contactNo(cp.getContactNo()).build();
+			contactPersonDtoList.add(contactPersonDto);
+		}
+		for (Device dev : entity.getDevices()) {
+			DeviceDto deviceDto = DeviceDto.builder().id(dev.getDeviceId()).deviceMake(dev.getDeviceMake())
+					.deviceSN(dev.getDeviceSN()).deviceType(dev.getDeviceType()).build();
+			deviceDtoList.add(deviceDto);
+		}
+		for (TimeSlot ts : entity.getTimeSlots()) {
+			TimeSlotDto slotDto = TimeSlotDto.builder().timeslotid(ts.getTimeslotId()).startTime(ts.getStartTime())
+					.endTime(ts.getEndtime()).build();
+			tomeSlotDtoList.add(slotDto);
+		}
+		VisitorDto dto = VisitorDto.builder().firstName(entity.getFirstName()).lastName(entity.getLastName())
+				.email(entity.getEmail()).contactNo(entity.getContactNo()).idProof(entity.getIdProof())
+				.placeOfVisit(entity.getPlaceOfVisit()).reasonForVisit(entity.getReasonForVisit())
+				.contactPerson(contactPersonDtoList).device(deviceDtoList).timeSlot(tomeSlotDtoList).build();
+		return dto;
 	}
 
 }

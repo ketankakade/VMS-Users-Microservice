@@ -28,13 +28,12 @@ public class TimeSlot {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private int timeslotId;
+	private Integer timeslotId;
 
 	@DateTimeFormat(pattern = "yyyy-MM-dd HH:mm", iso = ISO.DATE_TIME)
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm")
 	private LocalDateTime startTime;
 
-	// @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
 	@DateTimeFormat(pattern = "yyyy-MM-dd HH:mm", iso = ISO.DATE_TIME)
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm")
 	private LocalDateTime endtime;

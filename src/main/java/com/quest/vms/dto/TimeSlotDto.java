@@ -25,7 +25,7 @@ import lombok.NoArgsConstructor;
 public class TimeSlotDto {
 
 	@JsonIgnore
-	private int timeslotid;
+	private Integer timeslotid;
 	
 	@DateTimeFormat(pattern = "yyyy-MM-dd HH:mm", iso = ISO.DATE_TIME)
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm")
