@@ -4,6 +4,9 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.quest.vms.entity.Visitor;
@@ -41,8 +44,9 @@ public class VisitorDao implements IVisitorDao {
 	}
 
 	@Override
-	public List<Visitor> listVisitors() {
-		// TODO Auto-generated method stub
-		return visotorRepository.findAll();
+	public List<Visitor> listVisitors(Integer pageNo, Integer pageSize) {
+		Pageable paging = PageRequest.of(pageNo, pageSize);
+		Page<Visitor> pagedResult = visotorRepository.findAll(paging);
+		return pagedResult.toList();
 	}
 }

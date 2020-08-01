@@ -13,5 +13,5 @@ public interface IVisitorService {
 
 	public void delete(Integer id) throws RecordNotFoundException;
 
-	public GenericResponse<VisitorDto> listVisitors();
+	public GenericResponse<VisitorDto> listVisitors(Integer pageNo, Integer pageSize);
 }

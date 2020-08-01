@@ -9,6 +9,9 @@ import java.util.Set;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
@@ -56,16 +59,17 @@ public class VisitorService implements IVisitorService {
 			genericRes.setMessage("Success");
 			genericRes.setData(Collections.singletonList(visitorDTO));
 		} else {
-			genericRes.setErrorCode("400");
+			genericRes.setMessage("Visitor not found");
 		}
 		return genericRes;
 	}
 
 	@Override
-	public GenericResponse<VisitorDto> listVisitors() {
-		GenericResponse<VisitorDto> genericRes = new GenericResponse<VisitorDto>();
+	public GenericResponse<VisitorDto> listVisitors(Integer pageNo, Integer pageSize) {
+		GenericResponse<VisitorDto> genericRes = new GenericResponse<>(ErrorCodes.BAD_REQUEST_STATUS_CODE,
+				"BAD_REQUEST", null, null);
 		List<VisitorDto> visitorDTOList = new ArrayList<>();
-		List<Visitor> listedVisitors = visitorDao.listVisitors();
+		List<Visitor> listedVisitors = visitorDao.listVisitors(pageNo, pageSize);
 		if (!listedVisitors.isEmpty()) {
 			for (Visitor vis : listedVisitors) {
 				VisitorDto visitorDTO = transformEntityToDto(vis);
@@ -75,8 +79,7 @@ public class VisitorService implements IVisitorService {
 			genericRes.setMessage("Success");
 			genericRes.setData(visitorDTOList);
 		} else {
-			genericRes.setErrorCode("400");
-			genericRes.setMessage("get visitor list failed");
+			genericRes.setMessage("Visitor List is empty");
 			return genericRes;
 		}
 		return genericRes;

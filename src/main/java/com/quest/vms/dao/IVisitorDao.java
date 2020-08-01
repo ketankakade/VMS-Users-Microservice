@@ -12,6 +12,6 @@ public interface IVisitorDao {
 
 	public void delete(Visitor visitor);
 
-	public List<Visitor> listVisitors();
+	public List<Visitor> listVisitors(Integer pageNo, Integer pageSize);
 
 }

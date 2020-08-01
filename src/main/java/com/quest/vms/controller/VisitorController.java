@@ -57,11 +57,12 @@ public class VisitorController {
 	}
 
 	@ApiOperation(value = "Get All visistors from system")
-	@GetMapping(LIST_VISITOR)
-	public ResponseEntity<GenericResponse<VisitorDto>> listVisitors() {
+	@GetMapping(LIST_VISITOR + "/{pageNo}/{pageSize}")
+	public ResponseEntity<GenericResponse<VisitorDto>> listVisitors(@PathVariable Integer pageNo, 
+            @PathVariable Integer pageSize) {
 		log.info("list visitor");
 		try {
-			GenericResponse<VisitorDto> listVisitorGenericRes = visitorService.listVisitors();
+			GenericResponse<VisitorDto> listVisitorGenericRes = visitorService.listVisitors(pageNo, pageSize);
 			return ResponseEntity.status(listVisitorGenericRes.getMessageCode()).body(listVisitorGenericRes);
 		} catch (Exception e) {
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
