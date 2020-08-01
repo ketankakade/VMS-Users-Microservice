@@ -2,16 +2,17 @@ package com.quest.vms.dao;
 
 import java.util.List;
 
+import com.quest.vms.dto.VisitorDto;
 import com.quest.vms.entity.Visitor;
 
 public interface IVisitorDao {
 
-	public Visitor save(Visitor visitor);
+	public VisitorDto addVisitor(final VisitorDto visitor);
 
-	public Visitor getVisitorById(Integer id);
+	public VisitorDto getVisitorById(final Integer id);
 
-	public void delete(Visitor visitor);
+	public void delete(final Visitor visitor);
 
-	public List<Visitor> listVisitors(Integer pageNo, Integer pageSize);
+	public List<VisitorDto> listVisitors(Integer pageNo, Integer pageSize);
 
 }

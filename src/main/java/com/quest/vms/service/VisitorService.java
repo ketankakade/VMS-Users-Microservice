@@ -1,33 +1,19 @@
 package com.quest.vms.service;
 
-import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.Collections;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
+import java.util.Optional;
 
-import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import com.quest.vms.common.utils.ErrorCodes;
 import com.quest.vms.common.utils.GenericResponse;
-import com.quest.vms.customexception.InternalServerError;
-import com.quest.vms.customexception.RecordNotFoundException;
 import com.quest.vms.dao.IVisitorDao;
-import com.quest.vms.dto.ContactPersonDto;
-import com.quest.vms.dto.DeviceDto;
-import com.quest.vms.dto.TimeSlotDto;
 import com.quest.vms.dto.VisitorDto;
-import com.quest.vms.entity.ContactPerson;
-import com.quest.vms.entity.Device;
-import com.quest.vms.entity.TimeSlot;
 import com.quest.vms.entity.Visitor;
+import com.quest.vms.repository.VisitorRepository;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -36,25 +22,33 @@ import lombok.extern.slf4j.Slf4j;
 public class VisitorService implements IVisitorService {
 
 	@Autowired
-	IVisitorDao visitorDao;
-	private ModelMapper modelMapper = new ModelMapper();
+	private IVisitorDao visitorDao;
+
+	@Autowired
+	private VisitorRepository visitorRepository;
 
 	@Override
-	public VisitorDto create(final VisitorDto visitorDto) throws InternalServerError {
+	public GenericResponse<VisitorDto> addVisitor(final VisitorDto visitorDto) {
+		GenericResponse<VisitorDto> genericRes = new GenericResponse<>(ErrorCodes.BAD_REQUEST_STATUS_CODE,
+				"BAD_REQUEST", null, null);
 		log.info("save visitor");
-		Visitor visitor = transformDtoToEntity(visitorDto);
-		if (visitorDao.save(visitor) == null)
-			throw new InternalServerError("Error While saving data");
-		return visitorDto;
+		if (visitorDto != null) {
+			VisitorDto visitor = visitorDao.addVisitor(visitorDto);
+			genericRes.setMessageCode(HttpStatus.OK.value());
+			genericRes.setMessage("Success");
+			genericRes.setData(Collections.singletonList(visitor));
+		} else {
+			genericRes.setMessage("Failed to the persist Visitor");
+		}
+		return genericRes;
 	}
 
 	@Override
 	public GenericResponse<VisitorDto> getVisitorById(Integer visitorId) {
 		GenericResponse<VisitorDto> genericRes = new GenericResponse<>(ErrorCodes.BAD_REQUEST_STATUS_CODE,
 				"BAD_REQUEST", null, null);
-		Visitor visitor = visitorDao.getVisitorById(visitorId);
-		if (visitor != null) {
-			VisitorDto visitorDTO = transformEntityToDto(visitor);
+		VisitorDto visitorDTO = visitorDao.getVisitorById(visitorId);
+		if (visitorDTO != null) {
 			genericRes.setMessageCode(HttpStatus.OK.value());
 			genericRes.setMessage("Success");
 			genericRes.setData(Collections.singletonList(visitorDTO));
@@ -68,87 +62,32 @@ public class VisitorService implements IVisitorService {
 	public GenericResponse<VisitorDto> listVisitors(Integer pageNo, Integer pageSize) {
 		GenericResponse<VisitorDto> genericRes = new GenericResponse<>(ErrorCodes.BAD_REQUEST_STATUS_CODE,
 				"BAD_REQUEST", null, null);
-		List<VisitorDto> visitorDTOList = new ArrayList<>();
-		List<Visitor> listedVisitors = visitorDao.listVisitors(pageNo, pageSize);
+		List<VisitorDto> listedVisitors = visitorDao.listVisitors(pageNo, pageSize);
 		if (!listedVisitors.isEmpty()) {
-			for (Visitor vis : listedVisitors) {
-				VisitorDto visitorDTO = transformEntityToDto(vis);
-				visitorDTOList.add(visitorDTO);
-			}
 			genericRes.setMessageCode(HttpStatus.OK.value());
 			genericRes.setMessage("Success");
-			genericRes.setData(visitorDTOList);
+			genericRes.setData(listedVisitors);
 		} else {
 			genericRes.setMessage("Visitor List is empty");
-			return genericRes;
 		}
 		return genericRes;
 	}
 
 	@Override
-	public void delete(Integer id) throws RecordNotFoundException {
-		Visitor visitorToBeDeleted = null;
-		visitorToBeDeleted = visitorDao.getVisitorById(id);
-		if (visitorToBeDeleted == null)
-			throw new RecordNotFoundException("Record not found with id: " + id);
-		visitorDao.delete(visitorToBeDeleted);
-	}
-
-	public Visitor transformDtoToEntity(VisitorDto visitorDto) {
-		Set<ContactPerson> contactPersonSet = new HashSet<ContactPerson>();
-		Set<Device> deviceSet = new HashSet<Device>();
-		Set<TimeSlot> timeslotSet = new HashSet<TimeSlot>();
-		for (ContactPersonDto p : visitorDto.getContactPerson()) {
-			ContactPerson cp = ContactPerson.builder().contactNo(p.getContactNo()).email(p.getEmail())
-					.firstName(p.getFirstName()).lastName(p.getLastName()).build();
-			contactPersonSet.add(cp);
+	public GenericResponse<?> deleteVisitor(Integer visitorId) {
+		GenericResponse<?> genericRes = new GenericResponse<>(ErrorCodes.BAD_REQUEST_STATUS_CODE, "BAD_REQUEST",
+				null, null);
+		Optional<Visitor> visitorToBeDeleted = visitorRepository.findById(visitorId);
+		if (visitorToBeDeleted == null) {
+			genericRes.setMessage("Delete visitor failed..");
+			return genericRes;
+		} else {
+			Visitor visitor = visitorToBeDeleted.get();
+			visitorDao.delete(visitor);
+			genericRes.setMessageCode(HttpStatus.OK.value());
+			genericRes.setMessage("Success");
 		}
-		for (DeviceDto d : visitorDto.getDevice()) {
-			Device device = Device.builder().deviceMake(d.getDeviceMake()).deviceSN(d.getDeviceSN())
-					.deviceType(d.getDeviceType()).build();
-			deviceSet.add(device);
-		}
-		for (TimeSlotDto t : visitorDto.getTimeSlot()) {
-			TimeSlot ts = TimeSlot.builder().endtime(t.getEndTime()).startTime(t.getStartTime()).build();
-			timeslotSet.add(ts);
-		}
-		Visitor visitor = Visitor.builder().email(visitorDto.getEmail()).contactNo(visitorDto.getContactNo())
-				.firstName(visitorDto.getFirstName())
-				.lastName(visitorDto.getLastName())
-				.idProof(visitorDto.getIdProof())
-				.reasonForVisit(visitorDto.getReasonForVisit())
-				.placeOfVisit(visitorDto.getPlaceOfVisit())
-				.createdOn(LocalDateTime.now())
-				.contactPersons(contactPersonSet).devices(deviceSet).timeSlots(timeslotSet)
-				.build();
-		return visitor;
-	}
-
-	public VisitorDto transformEntityToDto(Visitor entity) {
-		List<ContactPersonDto> contactPersonDtoList = new ArrayList<>();
-		List<DeviceDto> deviceDtoList = new ArrayList<>();
-		List<TimeSlotDto> tomeSlotDtoList = new ArrayList<>();
-		for (ContactPerson cp : entity.getContactPersons()) {
-			ContactPersonDto contactPersonDto = ContactPersonDto.builder().contactPersonId(cp.getContactpersonid())
-					.email(cp.getEmail()).firstName(cp.getFirstName()).lastName(cp.getLastName())
-					.contactNo(cp.getContactNo()).build();
-			contactPersonDtoList.add(contactPersonDto);
-		}
-		for (Device dev : entity.getDevices()) {
-			DeviceDto deviceDto = DeviceDto.builder().id(dev.getDeviceId()).deviceMake(dev.getDeviceMake())
-					.deviceSN(dev.getDeviceSN()).deviceType(dev.getDeviceType()).build();
-			deviceDtoList.add(deviceDto);
-		}
-		for (TimeSlot ts : entity.getTimeSlots()) {
-			TimeSlotDto slotDto = TimeSlotDto.builder().timeslotid(ts.getTimeslotId()).startTime(ts.getStartTime())
-					.endTime(ts.getEndtime()).build();
-			tomeSlotDtoList.add(slotDto);
-		}
-		VisitorDto dto = VisitorDto.builder().firstName(entity.getFirstName()).lastName(entity.getLastName())
-				.email(entity.getEmail()).contactNo(entity.getContactNo()).idProof(entity.getIdProof())
-				.placeOfVisit(entity.getPlaceOfVisit()).reasonForVisit(entity.getReasonForVisit())
-				.contactPerson(contactPersonDtoList).device(deviceDtoList).timeSlot(tomeSlotDtoList).build();
-		return dto;
+		return genericRes;
 	}
 
 }

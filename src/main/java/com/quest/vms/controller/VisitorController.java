@@ -1,6 +1,11 @@
 package com.quest.vms.controller;
 
-import static com.quest.vms.common.utils.VmsConstants.*;
+import static com.quest.vms.common.utils.VmsConstants.CREATE_VISITOR;
+import static com.quest.vms.common.utils.VmsConstants.DELETE_VISITOR;
+import static com.quest.vms.common.utils.VmsConstants.GET_VISITOR;
+import static com.quest.vms.common.utils.VmsConstants.ID;
+import static com.quest.vms.common.utils.VmsConstants.LIST_VISITOR;
+import static com.quest.vms.common.utils.VmsConstants.VISITOR_URL_PATH;
 
 import javax.validation.Valid;
 
@@ -30,19 +35,17 @@ import lombok.extern.slf4j.Slf4j;
 public class VisitorController {
 
 	@Autowired
-	IVisitorService visitorService;
+	private IVisitorService visitorService;
 
 	@ApiOperation(value = "Add a Visitor to system")
 	@PostMapping(CREATE_VISITOR)
-	public ResponseEntity<?> create(@Valid @RequestBody VisitorDto visitor) {
-		VisitorDto userDto = null;
+	public ResponseEntity<GenericResponse<VisitorDto>> addVisitor(@Valid @RequestBody VisitorDto visitor) {
 		try {
-			userDto = visitorService.create(visitor);
+			GenericResponse<VisitorDto> createVisitorGenericRes = visitorService.addVisitor(visitor);
+			return ResponseEntity.status(createVisitorGenericRes.getMessageCode()).body(createVisitorGenericRes);
 		} catch (Exception e) {
-			log.error("error while saving Visitor");
-			return new ResponseEntity<String>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
 		}
-		return new ResponseEntity<VisitorDto>(userDto, HttpStatus.OK);
 	}
 
 	@ApiOperation(value = "Get User by Id")
@@ -58,8 +61,8 @@ public class VisitorController {
 
 	@ApiOperation(value = "Get All visistors from system")
 	@GetMapping(LIST_VISITOR + "/{pageNo}/{pageSize}")
-	public ResponseEntity<GenericResponse<VisitorDto>> listVisitors(@PathVariable Integer pageNo, 
-            @PathVariable Integer pageSize) {
+	public ResponseEntity<GenericResponse<VisitorDto>> listVisitors(@PathVariable Integer pageNo,
+			@PathVariable Integer pageSize) {
 		log.info("list visitor");
 		try {
 			GenericResponse<VisitorDto> listVisitorGenericRes = visitorService.listVisitors(pageNo, pageSize);
@@ -71,13 +74,14 @@ public class VisitorController {
 
 	@ApiOperation(value = "Delete Visitor from system")
 	@DeleteMapping(DELETE_VISITOR + "/{id}")
-	public ResponseEntity<?> delete(@PathVariable(value = "id") Integer id) {
+	public ResponseEntity<GenericResponse<?>> deleteVisitor(@PathVariable(value = "id") Integer visitorId) {
 		try {
-			visitorService.delete(id);
+			GenericResponse<?> deleteVisitorGenericRes = visitorService.deleteVisitor(visitorId);
+			return ResponseEntity.status(deleteVisitorGenericRes.getMessageCode()).body(deleteVisitorGenericRes);
 		} catch (Exception e) {
-			log.error("error while deleting visitor");
-			return new ResponseEntity<String>(e.getMessage(), HttpStatus.BAD_REQUEST);
+			log.error(e.getMessage());
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
 		}
-		return new ResponseEntity<String>("success", HttpStatus.OK);
 	}
+	
 }
