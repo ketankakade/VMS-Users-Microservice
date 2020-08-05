@@ -1,6 +1,7 @@
 package com.quest.vms.entity;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
@@ -69,16 +70,10 @@ public class Visitor {
 	@DateTimeFormat(pattern = "yyyy-MM-dd HH:mm", iso = ISO.DATE_TIME)
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm")
 	private LocalDateTime updatedOn;
-
+	
 	@OneToMany(cascade = CascadeType.ALL)
-	@JoinTable(name = "visitors_contactPerson", joinColumns = @JoinColumn(name = "visitorId"), inverseJoinColumns = @JoinColumn(name = "contactPersonId"))
-	private Set<ContactPerson> contactPersons;
+	@JoinColumn(name = "visits", nullable = false)
+	//@JoinTable(name = "visitors_visits", joinColumns = @JoinColumn(name = "visitorId"), inverseJoinColumns = @JoinColumn(name = "visitId"))
+	private List<Visit> visits;
 
-	@OneToMany(cascade = CascadeType.ALL)
-	@JoinTable(name = "visitors_device", joinColumns = @JoinColumn(name = "visitorId"), inverseJoinColumns = @JoinColumn(name = "deviceId"))
-	private Set<Device> devices;
-
-	@OneToMany(cascade = CascadeType.ALL)
-	@JoinTable(name = "visitors_timeSlots", joinColumns = @JoinColumn(name = "visitorId"), inverseJoinColumns = @JoinColumn(name = "timeSlotId"))
-	private Set<TimeSlot> timeSlots;
 }

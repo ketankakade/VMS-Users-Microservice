@@ -18,13 +18,9 @@ public class ContactPersonDto {
 	
 	@JsonIgnore
 	private Integer contactPersonId;
-
 	private String firstName;
-	
 	private String lastName;
-
 	private long contactNo;
-	
 	private String email;
 
 }

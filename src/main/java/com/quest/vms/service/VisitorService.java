@@ -44,7 +44,7 @@ public class VisitorService implements IVisitorService {
 	}
 
 	@Override
-	public GenericResponse<VisitorDto> getVisitorById(Integer visitorId) {
+	public GenericResponse<VisitorDto> getVisitorById(final Integer visitorId) {
 		GenericResponse<VisitorDto> genericRes = new GenericResponse<>(ErrorCodes.BAD_REQUEST_STATUS_CODE,
 				"BAD_REQUEST", null, null);
 		VisitorDto visitorDTO = visitorDao.getVisitorById(visitorId);
@@ -59,7 +59,7 @@ public class VisitorService implements IVisitorService {
 	}
 
 	@Override
-	public GenericResponse<VisitorDto> listVisitors(Integer pageNo, Integer pageSize) {
+	public GenericResponse<VisitorDto> listVisitors(final Integer pageNo, final Integer pageSize) {
 		GenericResponse<VisitorDto> genericRes = new GenericResponse<>(ErrorCodes.BAD_REQUEST_STATUS_CODE,
 				"BAD_REQUEST", null, null);
 		List<VisitorDto> listedVisitors = visitorDao.listVisitors(pageNo, pageSize);

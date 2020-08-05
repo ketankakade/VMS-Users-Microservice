@@ -2,6 +2,7 @@ package com.quest.vms.dto;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Set;
 
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.format.annotation.DateTimeFormat.ISO;
@@ -40,8 +41,7 @@ public class VisitorDto {
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm")
 	private LocalDateTime updatedOn;
 
-	private List<ContactPersonDto> contactPerson;
-	private List<TimeSlotDto> timeSlot;
-	private List<DeviceDto> device;
+
+	private List<VisitDto> visits;
 
 }

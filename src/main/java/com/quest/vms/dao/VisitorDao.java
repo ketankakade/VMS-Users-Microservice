@@ -11,19 +11,24 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Component;
 
 import com.quest.vms.dto.ContactPersonDto;
 import com.quest.vms.dto.DeviceDto;
 import com.quest.vms.dto.TimeSlotDto;
+import com.quest.vms.dto.VisitDto;
 import com.quest.vms.dto.VisitorDto;
 import com.quest.vms.entity.ContactPerson;
 import com.quest.vms.entity.Device;
 import com.quest.vms.entity.TimeSlot;
+import com.quest.vms.entity.Visit;
 import com.quest.vms.entity.Visitor;
 import com.quest.vms.repository.VisitorRepository;
 
-@Service
+import lombok.extern.slf4j.Slf4j;
+
+@Component
+@Slf4j
 public class VisitorDao implements IVisitorDao {
 
 	@Autowired
@@ -31,6 +36,7 @@ public class VisitorDao implements IVisitorDao {
 
 	@Override
 	public VisitorDto addVisitor(final VisitorDto visitorDto) {
+		log.info("Save visitor details::Visitor: {}", visitorDto);
 		Visitor visitor = transformDtoToEntity(visitorDto);
 		visitor = visotorRepository.save(visitor);
 		return transformEntityToDto(visitor);
@@ -57,7 +63,9 @@ public class VisitorDao implements IVisitorDao {
 		List<VisitorDto> visitorDTOList = new ArrayList<>();
 		Pageable paging = PageRequest.of(pageNo, pageSize);
 		Page<Visitor> pagedResult = visotorRepository.findAll(paging);
+		log.info("size == " + pagedResult.getSize());
 		List<Visitor> listedVisitors = pagedResult.toList();
+		log.info("listedVisitors size == " + listedVisitors.size());
 		for (Visitor visitor : listedVisitors) {
 			VisitorDto visitorDTO = transformEntityToDto(visitor);
 			visitorDTOList.add(visitorDTO);
@@ -66,55 +74,61 @@ public class VisitorDao implements IVisitorDao {
 	}
 
 	public Visitor transformDtoToEntity(VisitorDto visitorDto) {
-		Set<ContactPerson> contactPersonSet = new HashSet<ContactPerson>();
-		Set<Device> deviceSet = new HashSet<Device>();
-		Set<TimeSlot> timeslotSet = new HashSet<TimeSlot>();
-		for (ContactPersonDto p : visitorDto.getContactPerson()) {
-			ContactPerson cp = ContactPerson.builder().contactNo(p.getContactNo()).email(p.getEmail())
-					.firstName(p.getFirstName()).lastName(p.getLastName()).build();
-			contactPersonSet.add(cp);
+		List<Visit> visitSet = new ArrayList<>();
+
+		for (VisitDto visitDto : visitorDto.getVisits()) {
+			List<Device> deviceSet = new ArrayList<>();
+			ContactPerson contactPerson = ContactPerson.builder().firstName(visitDto.getContactPerson().getFirstName())
+					.lastName(visitDto.getContactPerson().getLastName())
+					.contactNo(visitDto.getContactPerson().getContactNo()).email(visitDto.getContactPerson().getEmail())
+					.build();
+			TimeSlot timeSlot = TimeSlot.builder().startTime(LocalDateTime.now()).endtime(LocalDateTime.now()).build();
+
+			for (DeviceDto deviceDto : visitDto.getDevice()) {
+				Device device = Device.builder().deviceId(deviceDto.getId()).deviceMake(deviceDto.getDeviceMake())
+						.deviceSN(deviceDto.getDeviceSN()).deviceType(deviceDto.getDeviceType()).build();
+				deviceSet.add(device);
+			}
+			Visit visit = Visit.builder().visitDate(new java.util.Date()).contactPerson(contactPerson)
+					.timeSlot(timeSlot).devices(deviceSet).build();
+			visitSet.add(visit);
 		}
-		for (DeviceDto d : visitorDto.getDevice()) {
-			Device device = Device.builder().deviceMake(d.getDeviceMake()).deviceSN(d.getDeviceSN())
-					.deviceType(d.getDeviceType()).build();
-			deviceSet.add(device);
-		}
-		for (TimeSlotDto t : visitorDto.getTimeSlot()) {
-			TimeSlot ts = TimeSlot.builder().endtime(t.getEndTime()).startTime(t.getStartTime()).build();
-			timeslotSet.add(ts);
-		}
+
 		Visitor visitor = Visitor.builder().email(visitorDto.getEmail()).contactNo(visitorDto.getContactNo())
 				.firstName(visitorDto.getFirstName()).lastName(visitorDto.getLastName())
 				.idProof(visitorDto.getIdProof()).reasonForVisit(visitorDto.getReasonForVisit())
-				.placeOfVisit(visitorDto.getPlaceOfVisit()).createdOn(LocalDateTime.now())
-				.contactPersons(contactPersonSet).devices(deviceSet).timeSlots(timeslotSet).build();
+				.placeOfVisit(visitorDto.getPlaceOfVisit()).createdOn(LocalDateTime.now()).visits(visitSet).build();
 		return visitor;
 	}
 
 	public VisitorDto transformEntityToDto(Visitor entity) {
-		List<ContactPersonDto> contactPersonDtoList = new ArrayList<>();
-		List<DeviceDto> deviceDtoList = new ArrayList<>();
-		List<TimeSlotDto> tomeSlotDtoList = new ArrayList<>();
-		for (ContactPerson cp : entity.getContactPersons()) {
-			ContactPersonDto contactPersonDto = ContactPersonDto.builder().contactPersonId(cp.getContactpersonid())
-					.email(cp.getEmail()).firstName(cp.getFirstName()).lastName(cp.getLastName())
-					.contactNo(cp.getContactNo()).build();
-			contactPersonDtoList.add(contactPersonDto);
+		List<VisitDto> VisitDtoSet = new ArrayList<>();
+
+		for (Visit visit : entity.getVisits()) {
+			List<DeviceDto> deviceDtoSet = new ArrayList<>();
+			ContactPersonDto contactPersonDto = ContactPersonDto.builder()
+					.firstName(visit.getContactPerson().getFirstName()).lastName(visit.getContactPerson().getLastName())
+					.contactNo(visit.getContactPerson().getContactNo()).email(visit.getContactPerson().getEmail())
+					.build();
+			TimeSlotDto timeSlotDto = TimeSlotDto.builder().startTime(LocalDateTime.now()).endTime(LocalDateTime.now())
+					.build();
+
+			for (Device device : visit.getDevices()) {
+				DeviceDto deviceDto = DeviceDto.builder().id(device.getDeviceId()).deviceMake(device.getDeviceMake())
+						.deviceSN(device.getDeviceSN()).deviceType(device.getDeviceType()).build();
+				deviceDtoSet.add(deviceDto);
+			}
+
+			VisitDto visitDto = VisitDto.builder().visitDate(visit.getVisitDate()).contactPerson(contactPersonDto)
+					.timeSlot(timeSlotDto).device(deviceDtoSet).build();
+			VisitDtoSet.add(visitDto);
 		}
-		for (Device dev : entity.getDevices()) {
-			DeviceDto deviceDto = DeviceDto.builder().id(dev.getDeviceId()).deviceMake(dev.getDeviceMake())
-					.deviceSN(dev.getDeviceSN()).deviceType(dev.getDeviceType()).build();
-			deviceDtoList.add(deviceDto);
-		}
-		for (TimeSlot ts : entity.getTimeSlots()) {
-			TimeSlotDto slotDto = TimeSlotDto.builder().timeslotid(ts.getTimeslotId()).startTime(ts.getStartTime())
-					.endTime(ts.getEndtime()).build();
-			tomeSlotDtoList.add(slotDto);
-		}
+
 		VisitorDto dto = VisitorDto.builder().firstName(entity.getFirstName()).lastName(entity.getLastName())
 				.email(entity.getEmail()).contactNo(entity.getContactNo()).idProof(entity.getIdProof())
 				.placeOfVisit(entity.getPlaceOfVisit()).reasonForVisit(entity.getReasonForVisit())
-				.contactPerson(contactPersonDtoList).device(deviceDtoList).timeSlot(tomeSlotDtoList).build();
+				.visits(VisitDtoSet)
+				.build();
 		return dto;
 	}
 }
