@@ -12,6 +12,8 @@ public interface IVisitorDao {
 	public VisitorDto getVisitorById(final Integer id);
 
 	public void delete(final Visitor visitor);
+	
+	public void update(final Visitor visitor);
 
 	public List<VisitorDto> listVisitors(Integer pageNo, Integer pageSize);
 

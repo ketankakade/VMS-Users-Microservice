@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -34,6 +35,7 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class VisitorController {
 
+	private static final String UPDATE_VISITOR = null;
 	@Autowired
 	private IVisitorService visitorService;
 
@@ -78,6 +80,18 @@ public class VisitorController {
 		try {
 			GenericResponse<?> deleteVisitorGenericResponse = visitorService.deleteVisitor(visitorId);
 			return ResponseEntity.status(deleteVisitorGenericResponse.getMessageCode()).body(deleteVisitorGenericResponse);
+		} catch (Exception e) {
+			log.error(e.getMessage());
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+		}
+	}
+	
+	@ApiOperation(value = "Update Visitor details")
+	@PutMapping(UPDATE_VISITOR + "/{id}")
+	public ResponseEntity<GenericResponse<?>> updateVisitor(@PathVariable(value = "id") Integer visitorId) {
+		try {
+			GenericResponse<?> updateVisitorGenericResponse = visitorService.updateVisitor(visitorId);
+			return ResponseEntity.status(updateVisitorGenericResponse.getMessageCode()).body(updateVisitorGenericResponse);
 		} catch (Exception e) {
 			log.error(e.getMessage());
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);

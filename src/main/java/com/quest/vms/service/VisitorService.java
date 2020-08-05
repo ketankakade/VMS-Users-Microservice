@@ -89,5 +89,22 @@ public class VisitorService implements IVisitorService {
 		}
 		return genericResponse;
 	}
+	
+	@Override
+	public GenericResponse<?> updateVisitor(Integer visitorId) {
+		GenericResponse<?> genericResponse = new GenericResponse<>(ErrorCodes.BAD_REQUEST_STATUS_CODE, "BAD_REQUEST", null,
+				null);
+		Optional<Visitor> visitorToBeUpdated = visitorRepository.findById(visitorId);
+		if (visitorToBeUpdated == null) {
+			genericResponse.setMessage("Update visitor failed..");
+			return genericResponse;
+		} else {
+			Visitor visitor = visitorToBeUpdated.get();
+			visitorDao.update(visitor);
+			genericResponse.setMessageCode(HttpStatus.OK.value());
+			genericResponse.setMessage("Success");
+		}
+		return genericResponse;
+	}
 
 }

@@ -44,6 +44,11 @@ public class VisitorDao implements IVisitorDao {
 	public void delete(final Visitor visitor) {
 		visitorRepository.delete(visitor);
 	}
+	
+	@Override
+	public void update(final Visitor visitor) {
+		visitorRepository.update(visitor);
+	}
 
 	@Override
 	public VisitorDto getVisitorById(final Integer id) {

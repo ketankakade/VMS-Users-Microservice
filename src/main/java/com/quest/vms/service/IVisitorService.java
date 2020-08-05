@@ -10,6 +10,8 @@ public interface IVisitorService {
 	public GenericResponse<VisitorDto> getVisitorById(Integer id);
 
 	public GenericResponse<?> deleteVisitor(Integer id);
+	
+	public GenericResponse<?> updateVisitor(Integer id);
 
 	public GenericResponse<VisitorDto> listVisitors(Integer pageNo, Integer pageSize);
 }
