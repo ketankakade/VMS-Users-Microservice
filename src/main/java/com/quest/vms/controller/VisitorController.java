@@ -41,8 +41,8 @@ public class VisitorController {
 	@PostMapping(CREATE_VISITOR)
 	public ResponseEntity<GenericResponse<VisitorDto>> addVisitor(@Valid @RequestBody VisitorDto visitor) {
 		try {
-			GenericResponse<VisitorDto> createVisitorGenericRes = visitorService.addVisitor(visitor);
-			return ResponseEntity.status(createVisitorGenericRes.getMessageCode()).body(createVisitorGenericRes);
+			GenericResponse<VisitorDto> createVisitorGenericResponse = visitorService.addVisitor(visitor);
+			return ResponseEntity.status(createVisitorGenericResponse.getMessageCode()).body(createVisitorGenericResponse);
 		} catch (Exception e) {
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
 		}
@@ -52,21 +52,21 @@ public class VisitorController {
 	@GetMapping(GET_VISITOR + "/{" + ID + "}")
 	public ResponseEntity<GenericResponse<VisitorDto>> getVisitorById(@PathVariable(value = ID) Integer id) {
 		try {
-			GenericResponse<VisitorDto> getVisitorGenericRes = visitorService.getVisitorById(id);
-			return ResponseEntity.status(getVisitorGenericRes.getMessageCode()).body(getVisitorGenericRes);
+			GenericResponse<VisitorDto> getVisitorGenericResponse = visitorService.getVisitorById(id);
+			return ResponseEntity.status(getVisitorGenericResponse.getMessageCode()).body(getVisitorGenericResponse);
 		} catch (Exception e) {
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
 		}
 	}
 
-	@ApiOperation(value = "Get All visistors from system")
+	@ApiOperation(value = "Get All visitors from system")
 	@GetMapping(LIST_VISITOR + "/{pageNo}/{pageSize}")
 	public ResponseEntity<GenericResponse<VisitorDto>> listVisitors(@PathVariable Integer pageNo,
 			@PathVariable Integer pageSize) {
 		log.info("list visitor");
 		try {
-			GenericResponse<VisitorDto> listVisitorGenericRes = visitorService.listVisitors(pageNo, pageSize);
-			return ResponseEntity.status(listVisitorGenericRes.getMessageCode()).body(listVisitorGenericRes);
+			GenericResponse<VisitorDto> listVisitorGenericResponse = visitorService.listVisitors(pageNo, pageSize);
+			return ResponseEntity.status(listVisitorGenericResponse.getMessageCode()).body(listVisitorGenericResponse);
 		} catch (Exception e) {
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
 		}
@@ -76,8 +76,8 @@ public class VisitorController {
 	@DeleteMapping(DELETE_VISITOR + "/{id}")
 	public ResponseEntity<GenericResponse<?>> deleteVisitor(@PathVariable(value = "id") Integer visitorId) {
 		try {
-			GenericResponse<?> deleteVisitorGenericRes = visitorService.deleteVisitor(visitorId);
-			return ResponseEntity.status(deleteVisitorGenericRes.getMessageCode()).body(deleteVisitorGenericRes);
+			GenericResponse<?> deleteVisitorGenericResponse = visitorService.deleteVisitor(visitorId);
+			return ResponseEntity.status(deleteVisitorGenericResponse.getMessageCode()).body(deleteVisitorGenericResponse);
 		} catch (Exception e) {
 			log.error(e.getMessage());
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);

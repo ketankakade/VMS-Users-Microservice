@@ -29,65 +29,65 @@ public class VisitorService implements IVisitorService {
 
 	@Override
 	public GenericResponse<VisitorDto> addVisitor(final VisitorDto visitorDto) {
-		GenericResponse<VisitorDto> genericRes = new GenericResponse<>(ErrorCodes.BAD_REQUEST_STATUS_CODE,
+		GenericResponse<VisitorDto> genericResponse = new GenericResponse<>(ErrorCodes.BAD_REQUEST_STATUS_CODE,
 				"BAD_REQUEST", null, null);
 		log.info("save visitor");
 		if (visitorDto != null) {
 			VisitorDto visitor = visitorDao.addVisitor(visitorDto);
-			genericRes.setMessageCode(HttpStatus.OK.value());
-			genericRes.setMessage("Success");
-			genericRes.setData(Collections.singletonList(visitor));
+			genericResponse.setMessageCode(HttpStatus.OK.value());
+			genericResponse.setMessage("Success");
+			genericResponse.setData(Collections.singletonList(visitor));
 		} else {
-			genericRes.setMessage("Failed to the persist Visitor");
+			genericResponse.setMessage("Failed to the persist Visitor");
 		}
-		return genericRes;
+		return genericResponse;
 	}
 
 	@Override
 	public GenericResponse<VisitorDto> getVisitorById(final Integer visitorId) {
-		GenericResponse<VisitorDto> genericRes = new GenericResponse<>(ErrorCodes.BAD_REQUEST_STATUS_CODE,
+		GenericResponse<VisitorDto> genericResponse = new GenericResponse<>(ErrorCodes.BAD_REQUEST_STATUS_CODE,
 				"BAD_REQUEST", null, null);
 		VisitorDto visitorDTO = visitorDao.getVisitorById(visitorId);
 		if (visitorDTO != null) {
-			genericRes.setMessageCode(HttpStatus.OK.value());
-			genericRes.setMessage("Success");
-			genericRes.setData(Collections.singletonList(visitorDTO));
+			genericResponse.setMessageCode(HttpStatus.OK.value());
+			genericResponse.setMessage("Success");
+			genericResponse.setData(Collections.singletonList(visitorDTO));
 		} else {
-			genericRes.setMessage("Visitor not found");
+			genericResponse.setMessage("Visitor not found");
 		}
-		return genericRes;
+		return genericResponse;
 	}
 
 	@Override
 	public GenericResponse<VisitorDto> listVisitors(final Integer pageNo, final Integer pageSize) {
-		GenericResponse<VisitorDto> genericRes = new GenericResponse<>(ErrorCodes.BAD_REQUEST_STATUS_CODE,
+		GenericResponse<VisitorDto> genericResponse = new GenericResponse<>(ErrorCodes.BAD_REQUEST_STATUS_CODE,
 				"BAD_REQUEST", null, null);
 		List<VisitorDto> listedVisitors = visitorDao.listVisitors(pageNo, pageSize);
 		if (!listedVisitors.isEmpty()) {
-			genericRes.setMessageCode(HttpStatus.OK.value());
-			genericRes.setMessage("Success");
-			genericRes.setData(listedVisitors);
+			genericResponse.setMessageCode(HttpStatus.OK.value());
+			genericResponse.setMessage("Success");
+			genericResponse.setData(listedVisitors);
 		} else {
-			genericRes.setMessage("Visitor List is empty");
+			genericResponse.setMessage("Visitor List is empty");
 		}
-		return genericRes;
+		return genericResponse;
 	}
 
 	@Override
 	public GenericResponse<?> deleteVisitor(Integer visitorId) {
-		GenericResponse<?> genericRes = new GenericResponse<>(ErrorCodes.BAD_REQUEST_STATUS_CODE, "BAD_REQUEST", null,
+		GenericResponse<?> genericResponse = new GenericResponse<>(ErrorCodes.BAD_REQUEST_STATUS_CODE, "BAD_REQUEST", null,
 				null);
 		Optional<Visitor> visitorToBeDeleted = visitorRepository.findById(visitorId);
 		if (visitorToBeDeleted == null) {
-			genericRes.setMessage("Delete visitor failed..");
-			return genericRes;
+			genericResponse.setMessage("Delete visitor failed..");
+			return genericResponse;
 		} else {
 			Visitor visitor = visitorToBeDeleted.get();
 			visitorDao.delete(visitor);
-			genericRes.setMessageCode(HttpStatus.OK.value());
-			genericRes.setMessage("Success");
+			genericResponse.setMessageCode(HttpStatus.OK.value());
+			genericResponse.setMessage("Success");
 		}
-		return genericRes;
+		return genericResponse;
 	}
 
 }

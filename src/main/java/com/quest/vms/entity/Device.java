@@ -28,5 +28,9 @@ public class Device {
 	private String deviceType;
 
 	private String deviceMake;
+	
+	private Boolean isSecurityCheckDone;
+	
+	private String securityFlaws;
 
 }

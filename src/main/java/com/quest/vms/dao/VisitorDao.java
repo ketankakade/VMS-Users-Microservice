@@ -30,25 +30,25 @@ import lombok.extern.slf4j.Slf4j;
 public class VisitorDao implements IVisitorDao {
 
 	@Autowired
-	private VisitorRepository visotorRepository;
+	private VisitorRepository visitorRepository;
 
 	@Override
 	public VisitorDto addVisitor(final VisitorDto visitorDto) {
 		log.info("Save visitor details::Visitor: {}", visitorDto);
 		Visitor visitor = transformDtoToEntity(visitorDto);
-		visitor = visotorRepository.save(visitor);
+		visitor = visitorRepository.save(visitor);
 		return transformEntityToDto(visitor);
 	}
 
 	@Override
 	public void delete(final Visitor visitor) {
-		visotorRepository.delete(visitor);
+		visitorRepository.delete(visitor);
 	}
 
 	@Override
 	public VisitorDto getVisitorById(final Integer id) {
 		VisitorDto visitorDto = null;
-		Optional<Visitor> visitorOptional = visotorRepository.findById(id);
+		Optional<Visitor> visitorOptional = visitorRepository.findById(id);
 		if (visitorOptional.isPresent()) {
 			Visitor visitor = visitorOptional.get();
 			visitorDto = transformEntityToDto(visitor);
@@ -60,7 +60,7 @@ public class VisitorDao implements IVisitorDao {
 	public List<VisitorDto> listVisitors(Integer pageNo, Integer pageSize) {
 		List<VisitorDto> visitorDTOList = new ArrayList<>();
 		Pageable paging = PageRequest.of(pageNo, pageSize);
-		Page<Visitor> pagedResult = visotorRepository.findAll(paging);
+		Page<Visitor> pagedResult = visitorRepository.findAll(paging);
 		List<Visitor> listedVisitors = pagedResult.toList();
 		log.info("listedVisitors size " + listedVisitors.size());
 		for (Visitor visitor : listedVisitors) {
@@ -83,7 +83,8 @@ public class VisitorDao implements IVisitorDao {
 
 			for (DeviceDto deviceDto : visitDto.getDevice()) {
 				Device device = Device.builder().deviceId(deviceDto.getId()).deviceMake(deviceDto.getDeviceMake())
-						.deviceSN(deviceDto.getDeviceSN()).deviceType(deviceDto.getDeviceType()).build();
+						.deviceSN(deviceDto.getDeviceSN()).deviceType(deviceDto.getDeviceType()).isSecurityCheckDone(deviceDto.getIsSecurityCheckDone())
+						.securityFlaws(deviceDto.getSecurityFlaws()).build();
 				deviceSet.add(device);
 			}
 			Visit visit = Visit.builder().visitDate(new java.util.Date()).contactPerson(contactPerson)
@@ -94,7 +95,7 @@ public class VisitorDao implements IVisitorDao {
 		Visitor visitor = Visitor.builder().email(visitorDto.getEmail()).contactNo(visitorDto.getContactNo())
 				.firstName(visitorDto.getFirstName()).lastName(visitorDto.getLastName())
 				.idProof(visitorDto.getIdProof()).reasonForVisit(visitorDto.getReasonForVisit())
-				.placeOfVisit(visitorDto.getPlaceOfVisit()).createdOn(LocalDateTime.now()).visits(visitSet).build();
+				.placeOfVisit(visitorDto.getPlaceOfVisit()).createdOn(LocalDateTime.now()).visitorType(visitorDto.getVisitorType()).visits(visitSet).build();
 		return visitor;
 	}
 
@@ -123,7 +124,7 @@ public class VisitorDao implements IVisitorDao {
 
 		VisitorDto dto = VisitorDto.builder().firstName(entity.getFirstName()).lastName(entity.getLastName())
 				.email(entity.getEmail()).contactNo(entity.getContactNo()).idProof(entity.getIdProof())
-				.placeOfVisit(entity.getPlaceOfVisit()).reasonForVisit(entity.getReasonForVisit()).visits(VisitDtoSet)
+				.placeOfVisit(entity.getPlaceOfVisit()).reasonForVisit(entity.getReasonForVisit()).visitorType(entity.getVisitorType()).visits(VisitDtoSet)
 				.build();
 		return dto;
 	}
