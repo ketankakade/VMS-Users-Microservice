@@ -40,8 +40,7 @@ public class Visit {
 	private TimeSlot timeSlot;
 
 	@OneToMany(cascade = CascadeType.ALL)
-	 @JoinTable(name = "visits_device", joinColumns = @JoinColumn(name =
-	 "visitId"), inverseJoinColumns = @JoinColumn(name = "deviceId"))
+	@JoinTable(name = "visits_device", joinColumns = @JoinColumn(name = "visitId"), inverseJoinColumns = @JoinColumn(name = "deviceId"))
 	private List<Device> devices;
 
 }

@@ -41,7 +41,6 @@ public class VisitorDto {
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm")
 	private LocalDateTime updatedOn;
 
-
 	private List<VisitDto> visits;
 
 }

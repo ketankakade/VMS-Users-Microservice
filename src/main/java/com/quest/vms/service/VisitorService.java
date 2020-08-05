@@ -75,8 +75,8 @@ public class VisitorService implements IVisitorService {
 
 	@Override
 	public GenericResponse<?> deleteVisitor(Integer visitorId) {
-		GenericResponse<?> genericRes = new GenericResponse<>(ErrorCodes.BAD_REQUEST_STATUS_CODE, "BAD_REQUEST",
-				null, null);
+		GenericResponse<?> genericRes = new GenericResponse<>(ErrorCodes.BAD_REQUEST_STATUS_CODE, "BAD_REQUEST", null,
+				null);
 		Optional<Visitor> visitorToBeDeleted = visitorRepository.findById(visitorId);
 		if (visitorToBeDeleted == null) {
 			genericRes.setMessage("Delete visitor failed..");

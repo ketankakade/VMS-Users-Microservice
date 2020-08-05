@@ -2,10 +2,8 @@ package com.quest.vms.dao;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
-import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -63,9 +61,8 @@ public class VisitorDao implements IVisitorDao {
 		List<VisitorDto> visitorDTOList = new ArrayList<>();
 		Pageable paging = PageRequest.of(pageNo, pageSize);
 		Page<Visitor> pagedResult = visotorRepository.findAll(paging);
-		log.info("size == " + pagedResult.getSize());
 		List<Visitor> listedVisitors = pagedResult.toList();
-		log.info("listedVisitors size == " + listedVisitors.size());
+		log.info("listedVisitors size " + listedVisitors.size());
 		for (Visitor visitor : listedVisitors) {
 			VisitorDto visitorDTO = transformEntityToDto(visitor);
 			visitorDTOList.add(visitorDTO);
@@ -126,8 +123,7 @@ public class VisitorDao implements IVisitorDao {
 
 		VisitorDto dto = VisitorDto.builder().firstName(entity.getFirstName()).lastName(entity.getLastName())
 				.email(entity.getEmail()).contactNo(entity.getContactNo()).idProof(entity.getIdProof())
-				.placeOfVisit(entity.getPlaceOfVisit()).reasonForVisit(entity.getReasonForVisit())
-				.visits(VisitDtoSet)
+				.placeOfVisit(entity.getPlaceOfVisit()).reasonForVisit(entity.getReasonForVisit()).visits(VisitDtoSet)
 				.build();
 		return dto;
 	}
