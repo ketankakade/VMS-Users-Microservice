@@ -4,6 +4,7 @@ import java.util.Date;
 import java.util.List;
 
 import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -26,11 +27,18 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class Visit {
-
+	
+	public static final String VISIT_ID = "visit_id";
+	public static final String VISIT_DATE = "visit_date";
+	public static final String CONTACT_PERSON = "contact_person";
+	public static final String TIME_SLOT = "time_slot";
+	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = VISIT_ID)
 	private Integer visitId;
 
+	@Column(name = VISIT_DATE)
 	private Date visitDate;
 
 	@OneToOne(cascade = CascadeType.ALL)
@@ -40,7 +48,7 @@ public class Visit {
 	private TimeSlot timeSlot;
 
 	@OneToMany(cascade = CascadeType.ALL)
-	@JoinTable(name = "visits_device", joinColumns = @JoinColumn(name = "visitId"), inverseJoinColumns = @JoinColumn(name = "deviceId"))
+	@JoinTable(name = "visits_devices", joinColumns = @JoinColumn(name = "visit_id"), inverseJoinColumns = @JoinColumn(name = "device_id"))
 	private List<Device> devices;
 
 }

@@ -23,17 +23,28 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class ContactPerson {
 
+	public static final String CONTACT_PERSON_ID = "contact_person_id";
+	public static final String FIRST_NAME = "first_name";
+	public static final String LAST_NAME = "last_name";
+	public static final String EMAIL = "email";
+	public static final String CONTACT_NUMBER = "contact_number";
+	
+	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Integer contactpersonid;
+	@Column(name = CONTACT_PERSON_ID)
+	private Integer contactPersonId;
 
 	@NotBlank
+	@Column(name = FIRST_NAME)
 	private String firstName;
 
 	@NotBlank
+	@Column(name = LAST_NAME)
 	private String lastName;
 
 	@NotNull
+	@Column(name = CONTACT_NUMBER)
 	private long contactNo;
 
 	@NotBlank

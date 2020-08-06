@@ -14,8 +14,8 @@ import lombok.NoArgsConstructor;
 public class DeviceDto {
 	
 	@JsonIgnore
-	private Integer id;	
-	private String deviceSN;
+	private Integer deviceId;	
+	private String serialNumber;
 	private String deviceType;
 	private String deviceMake;
 	private Boolean isSecurityCheckDone;

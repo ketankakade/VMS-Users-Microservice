@@ -6,6 +6,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import org.modelmapper.ModelMapper;
+import org.modelmapper.convention.MatchingStrategies;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -32,6 +34,8 @@ public class VisitorDaoImpl implements VisitorDao {
 
 	@Autowired
 	private VisitorRepository visitorRepository;
+	
+	private ModelMapper modelMapper = new ModelMapper();
 
 	@Override
 	public VisitorDto addVisitor(final VisitorDto visitorDto) {
@@ -43,19 +47,19 @@ public class VisitorDaoImpl implements VisitorDao {
 
 	@Override
 	public void delete(final Visitor visitor) {
-		log.info("Delete visitor details::Visitor: {}", visitor.getId());
+		log.info("Delete visitor details::Visitor: {}", visitor.getVisitorId());
 		visitorRepository.delete(visitor);
 	}
 
 	@Override
 	public VisitorDto update(VisitorDto visitorDto) {
-		log.info("Update visitor details::Visitor: {}", visitorDto.getId());
-		Optional<Visitor> visitor = visitorRepository.findById(visitorDto.getId());
+		log.info("Update visitor details::Visitor: {}", visitorDto.getVisitorId());
+		Optional<Visitor> visitor = visitorRepository.findById(visitorDto.getVisitorId());
 		if (visitor == null) {
 			return null;
 		} else {
 		Visitor visitorToBeUpdated = transformDtoToEntity(visitorDto);
-		visitorToBeUpdated.setId(visitorDto.getId());
+		visitorToBeUpdated.setVisitorId(visitorDto.getVisitorId());
 		visitorToBeUpdated.setCreatedTs(visitor.get().getCreatedTs());
 		visitorToBeUpdated = visitorRepository.save(visitorToBeUpdated);
 		return transformEntityToDto(visitorToBeUpdated);
@@ -86,63 +90,15 @@ public class VisitorDaoImpl implements VisitorDao {
 		}
 		return visitorDTOList;
 	}
+	
+	public Visitor transformDtoToEntity(VisitorDto dto) {
+	    modelMapper.getConfiguration().setMatchingStrategy(MatchingStrategies.LOOSE);
+	    return modelMapper.map(dto, Visitor.class);
+	  }
+	  
+	  public VisitorDto transformEntityToDto(Visitor entity) {
+	    modelMapper.getConfiguration().setMatchingStrategy(MatchingStrategies.LOOSE);
+	    return modelMapper.map(entity, VisitorDto.class);
+	  }
 
-	public Visitor transformDtoToEntity(VisitorDto visitorDto) {
-		List<Visit> visitSet = new ArrayList<>();
-
-		for (VisitDto visitDto : visitorDto.getVisits()) {
-			List<Device> deviceSet = new ArrayList<>();
-			ContactPerson contactPerson = ContactPerson.builder().firstName(visitDto.getContactPerson().getFirstName())
-					.lastName(visitDto.getContactPerson().getLastName())
-					.contactNo(visitDto.getContactPerson().getContactNo()).email(visitDto.getContactPerson().getEmail())
-					.build();
-			TimeSlot timeSlot = TimeSlot.builder().startTime(LocalDateTime.now()).endtime(LocalDateTime.now()).build();
-
-			for (DeviceDto deviceDto : visitDto.getDevice()) {
-				Device device = Device.builder().deviceId(deviceDto.getId()).deviceMake(deviceDto.getDeviceMake())
-						.deviceSN(deviceDto.getDeviceSN()).deviceType(deviceDto.getDeviceType()).isSecurityCheckDone(deviceDto.getIsSecurityCheckDone())
-						.securityFlaws(deviceDto.getSecurityFlaws()).build();
-				deviceSet.add(device);
-			}
-			Visit visit = Visit.builder().visitDate(new java.util.Date()).contactPerson(contactPerson)
-					.timeSlot(timeSlot).devices(deviceSet).build();
-			visitSet.add(visit);
-		}
-
-		Visitor visitor = Visitor.builder().email(visitorDto.getEmail()).contactNo(visitorDto.getContactNo())
-				.firstName(visitorDto.getFirstName()).lastName(visitorDto.getLastName())
-				.idProof(visitorDto.getIdProof()).reasonForVisit(visitorDto.getReasonForVisit())
-				.placeOfVisit(visitorDto.getPlaceOfVisit()).visitorType(visitorDto.getVisitorType()).visits(visitSet).build();
-		return visitor;
 	}
-
-	public VisitorDto transformEntityToDto(Visitor entity) {
-		List<VisitDto> VisitDtoSet = new ArrayList<>();
-
-		for (Visit visit : entity.getVisits()) {
-			List<DeviceDto> deviceDtoSet = new ArrayList<>();
-			ContactPersonDto contactPersonDto = ContactPersonDto.builder()
-					.firstName(visit.getContactPerson().getFirstName()).lastName(visit.getContactPerson().getLastName())
-					.contactNo(visit.getContactPerson().getContactNo()).email(visit.getContactPerson().getEmail())
-					.build();
-			TimeSlotDto timeSlotDto = TimeSlotDto.builder().startTime(LocalDateTime.now()).endTime(LocalDateTime.now())
-					.build();
-
-			for (Device device : visit.getDevices()) {
-				DeviceDto deviceDto = DeviceDto.builder().id(device.getDeviceId()).deviceMake(device.getDeviceMake())
-						.deviceSN(device.getDeviceSN()).deviceType(device.getDeviceType()).build();
-				deviceDtoSet.add(deviceDto);
-			}
-
-			VisitDto visitDto = VisitDto.builder().visitDate(visit.getVisitDate()).contactPerson(contactPersonDto)
-					.timeSlot(timeSlotDto).device(deviceDtoSet).build();
-			VisitDtoSet.add(visitDto);
-		}
-
-		VisitorDto dto = VisitorDto.builder().firstName(entity.getFirstName()).lastName(entity.getLastName())
-				.email(entity.getEmail()).contactNo(entity.getContactNo()).idProof(entity.getIdProof())
-				.placeOfVisit(entity.getPlaceOfVisit()).reasonForVisit(entity.getReasonForVisit())
-				.visitorType(entity.getVisitorType()).visits(VisitDtoSet).build();
-		return dto;
-	}
-}

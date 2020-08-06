@@ -31,6 +31,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class Visitor {
 
+	public static final String VISITOR_ID = "visitor_id";
 	public static final String FIRST_NAME = "first_name";
 	public static final String LAST_NAME = "last_name";
 	public static final String EMAIL = "email";
@@ -45,7 +46,8 @@ public class Visitor {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Integer id;
+	@Column(name = VISITOR_ID)
+	private Integer visitorId;
 
 	@NotNull
 	@Column(name = FIRST_NAME)

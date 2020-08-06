@@ -18,10 +18,10 @@ import lombok.NoArgsConstructor;
 public class VisitDto {
 	
 	@JsonIgnore
-	private Integer id;	
+	private Integer visitId;	
 	private Date visitDate;
 	private ContactPersonDto contactPerson;
 	private TimeSlotDto timeSlot;
-	private List<DeviceDto> device;
+	private List<DeviceDto> devices;
 	
 }
