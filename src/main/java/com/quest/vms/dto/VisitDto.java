@@ -2,7 +2,6 @@ package com.quest.vms.dto;
 
 import java.util.Date;
 import java.util.List;
-import java.util.Set;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -16,12 +15,12 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class VisitDto {
-	
+
 	@JsonIgnore
-	private Integer visitId;	
+	private Integer visitId;
 	private Date visitDate;
 	private ContactPersonDto contactPerson;
 	private TimeSlotDto timeSlot;
 	private List<DeviceDto> devices;
-	
+
 }

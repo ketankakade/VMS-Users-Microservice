@@ -1,7 +1,5 @@
 package com.quest.vms.dao;
 
-import java.sql.Date;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -14,15 +12,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
 
-import com.quest.vms.dto.ContactPersonDto;
-import com.quest.vms.dto.DeviceDto;
-import com.quest.vms.dto.TimeSlotDto;
-import com.quest.vms.dto.VisitDto;
 import com.quest.vms.dto.VisitorDto;
-import com.quest.vms.entity.ContactPerson;
-import com.quest.vms.entity.Device;
-import com.quest.vms.entity.TimeSlot;
-import com.quest.vms.entity.Visit;
 import com.quest.vms.entity.Visitor;
 import com.quest.vms.repository.VisitorRepository;
 
@@ -34,7 +24,7 @@ public class VisitorDaoImpl implements VisitorDao {
 
 	@Autowired
 	private VisitorRepository visitorRepository;
-	
+
 	private ModelMapper modelMapper = new ModelMapper();
 
 	@Override
@@ -58,11 +48,11 @@ public class VisitorDaoImpl implements VisitorDao {
 		if (visitor == null) {
 			return null;
 		} else {
-		Visitor visitorToBeUpdated = transformDtoToEntity(visitorDto);
-		visitorToBeUpdated.setVisitorId(visitorDto.getVisitorId());
-		visitorToBeUpdated.setCreatedTs(visitor.get().getCreatedTs());
-		visitorToBeUpdated = visitorRepository.save(visitorToBeUpdated);
-		return transformEntityToDto(visitorToBeUpdated);
+			Visitor visitorToBeUpdated = transformDtoToEntity(visitorDto);
+			visitorToBeUpdated.setVisitorId(visitorDto.getVisitorId());
+			visitorToBeUpdated.setCreatedTs(visitor.get().getCreatedTs());
+			visitorToBeUpdated = visitorRepository.save(visitorToBeUpdated);
+			return transformEntityToDto(visitorToBeUpdated);
 		}
 	}
 
@@ -90,15 +80,15 @@ public class VisitorDaoImpl implements VisitorDao {
 		}
 		return visitorDTOList;
 	}
-	
-	public Visitor transformDtoToEntity(VisitorDto dto) {
-	    modelMapper.getConfiguration().setMatchingStrategy(MatchingStrategies.LOOSE);
-	    return modelMapper.map(dto, Visitor.class);
-	  }
-	  
-	  public VisitorDto transformEntityToDto(Visitor entity) {
-	    modelMapper.getConfiguration().setMatchingStrategy(MatchingStrategies.LOOSE);
-	    return modelMapper.map(entity, VisitorDto.class);
-	  }
 
+	public Visitor transformDtoToEntity(VisitorDto dto) {
+		modelMapper.getConfiguration().setMatchingStrategy(MatchingStrategies.LOOSE);
+		return modelMapper.map(dto, Visitor.class);
 	}
+
+	public VisitorDto transformEntityToDto(Visitor entity) {
+		modelMapper.getConfiguration().setMatchingStrategy(MatchingStrategies.LOOSE);
+		return modelMapper.map(entity, VisitorDto.class);
+	}
+
+}
