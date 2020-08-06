@@ -1,5 +1,6 @@
 package com.quest.vms.dao;
 
+import java.sql.Date;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -45,14 +46,20 @@ public class VisitorDaoImpl implements VisitorDao {
 		log.info("Delete visitor details::Visitor: {}", visitor.getId());
 		visitorRepository.delete(visitor);
 	}
-	
+
 	@Override
 	public VisitorDto update(VisitorDto visitorDto) {
 		log.info("Update visitor details::Visitor: {}", visitorDto.getId());
-		Visitor visitor = transformDtoToEntity(visitorDto);
-		visitor.setId(visitorDto.getId());
-		visitor = visitorRepository.save(visitor);
-		return transformEntityToDto(visitor);
+		Optional<Visitor> visitor = visitorRepository.findById(visitorDto.getId());
+		if (visitor == null) {
+			return null;
+		} else {
+		Visitor visitorToBeUpdated = transformDtoToEntity(visitorDto);
+		visitorToBeUpdated.setId(visitorDto.getId());
+		visitorToBeUpdated.setCreatedTs(visitor.get().getCreatedTs());
+		visitorToBeUpdated = visitorRepository.save(visitorToBeUpdated);
+		return transformEntityToDto(visitorToBeUpdated);
+		}
 	}
 
 	@Override
@@ -105,7 +112,7 @@ public class VisitorDaoImpl implements VisitorDao {
 		Visitor visitor = Visitor.builder().email(visitorDto.getEmail()).contactNo(visitorDto.getContactNo())
 				.firstName(visitorDto.getFirstName()).lastName(visitorDto.getLastName())
 				.idProof(visitorDto.getIdProof()).reasonForVisit(visitorDto.getReasonForVisit())
-				.placeOfVisit(visitorDto.getPlaceOfVisit()).createdOn(LocalDateTime.now()).visitorType(visitorDto.getVisitorType()).visits(visitSet).build();
+				.placeOfVisit(visitorDto.getPlaceOfVisit()).visitorType(visitorDto.getVisitorType()).visits(visitSet).build();
 		return visitor;
 	}
 
@@ -134,8 +141,8 @@ public class VisitorDaoImpl implements VisitorDao {
 
 		VisitorDto dto = VisitorDto.builder().firstName(entity.getFirstName()).lastName(entity.getLastName())
 				.email(entity.getEmail()).contactNo(entity.getContactNo()).idProof(entity.getIdProof())
-				.placeOfVisit(entity.getPlaceOfVisit()).reasonForVisit(entity.getReasonForVisit()).visitorType(entity.getVisitorType()).visits(VisitDtoSet)
-				.build();
+				.placeOfVisit(entity.getPlaceOfVisit()).reasonForVisit(entity.getReasonForVisit())
+				.visitorType(entity.getVisitorType()).visits(VisitDtoSet).build();
 		return dto;
 	}
 }
