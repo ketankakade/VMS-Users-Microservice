@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.quest.vms.common.utils.GenericResponse;
 import com.quest.vms.dto.VisitorDto;
-import com.quest.vms.service.IVisitorService;
+import com.quest.vms.service.VisitorService;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -31,7 +31,7 @@ import lombok.extern.slf4j.Slf4j;
 public class VisitorController {
 
 	@Autowired
-	private IVisitorService visitorService;
+	private VisitorService visitorService;
 
 	@ApiOperation(value = "Add a Visitor to system")
 	@PostMapping(CREATE_VISITOR)

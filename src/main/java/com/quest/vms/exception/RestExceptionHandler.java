@@ -1,4 +1,4 @@
-package com.quest.vms.customexception;
+package com.quest.vms.exception;
 
 import java.util.ArrayList;
 import java.util.List;
