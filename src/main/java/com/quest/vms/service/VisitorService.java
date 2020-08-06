@@ -75,8 +75,8 @@ public class VisitorService implements IVisitorService {
 
 	@Override
 	public GenericResponse<?> deleteVisitor(Integer visitorId) {
-		GenericResponse<?> genericResponse = new GenericResponse<>(ErrorCodes.BAD_REQUEST_STATUS_CODE, "BAD_REQUEST", null,
-				null);
+		GenericResponse<?> genericResponse = new GenericResponse<>(ErrorCodes.BAD_REQUEST_STATUS_CODE, "BAD_REQUEST",
+				null, null);
 		Optional<Visitor> visitorToBeDeleted = visitorRepository.findById(visitorId);
 		if (visitorToBeDeleted == null) {
 			genericResponse.setMessage("Delete visitor failed..");
@@ -89,20 +89,24 @@ public class VisitorService implements IVisitorService {
 		}
 		return genericResponse;
 	}
-	
+
 	@Override
-	public GenericResponse<?> updateVisitor(Integer visitorId) {
-		GenericResponse<?> genericResponse = new GenericResponse<>(ErrorCodes.BAD_REQUEST_STATUS_CODE, "BAD_REQUEST", null,
-				null);
-		Optional<Visitor> visitorToBeUpdated = visitorRepository.findById(visitorId);
-		if (visitorToBeUpdated == null) {
-			genericResponse.setMessage("Update visitor failed..");
-			return genericResponse;
+	public GenericResponse<VisitorDto> updateVisitor(VisitorDto visitorDto) {
+		GenericResponse<VisitorDto> genericResponse = new GenericResponse<>(ErrorCodes.BAD_REQUEST_STATUS_CODE,
+				"BAD_REQUEST", null, null);
+		if (visitorDto == null) {
+			genericResponse.setMessage("visitor data is missing in request");
 		} else {
-			Visitor visitor = visitorToBeUpdated.get();
-			visitorDao.update(visitor);
-			genericResponse.setMessageCode(HttpStatus.OK.value());
-			genericResponse.setMessage("Success");
+			Optional<Visitor> visitorToBeUpdated = visitorRepository.findById(visitorDto.getId());
+			if (visitorToBeUpdated == null) {
+				genericResponse.setMessage("Update visitor failed..");
+				return genericResponse;
+			} else {
+				VisitorDto visitor = visitorDao.update(visitorDto);
+				genericResponse.setMessageCode(HttpStatus.OK.value());
+				genericResponse.setMessage("Success");
+				genericResponse.setData(Collections.singletonList(visitor));
+			}
 		}
 		return genericResponse;
 	}

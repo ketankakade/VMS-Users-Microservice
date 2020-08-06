@@ -1,11 +1,6 @@
 package com.quest.vms.controller;
 
-import static com.quest.vms.common.utils.VmsConstants.CREATE_VISITOR;
-import static com.quest.vms.common.utils.VmsConstants.DELETE_VISITOR;
-import static com.quest.vms.common.utils.VmsConstants.GET_VISITOR;
-import static com.quest.vms.common.utils.VmsConstants.ID;
-import static com.quest.vms.common.utils.VmsConstants.LIST_VISITOR;
-import static com.quest.vms.common.utils.VmsConstants.VISITOR_URL_PATH;
+import static com.quest.vms.common.utils.VmsConstants.*;
 
 import javax.validation.Valid;
 
@@ -35,7 +30,6 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class VisitorController {
 
-	private static final String UPDATE_VISITOR = null;
 	@Autowired
 	private IVisitorService visitorService;
 
@@ -87,10 +81,10 @@ public class VisitorController {
 	}
 	
 	@ApiOperation(value = "Update Visitor details")
-	@PutMapping(UPDATE_VISITOR + "/{id}")
-	public ResponseEntity<GenericResponse<?>> updateVisitor(@PathVariable(value = "id") Integer visitorId) {
+	@PutMapping(UPDATE_VISITOR)
+	public ResponseEntity<GenericResponse<VisitorDto>> updateVisitor(@Valid @RequestBody VisitorDto visitor) {
 		try {
-			GenericResponse<?> updateVisitorGenericResponse = visitorService.updateVisitor(visitorId);
+			GenericResponse<VisitorDto> updateVisitorGenericResponse = visitorService.updateVisitor(visitor);
 			return ResponseEntity.status(updateVisitorGenericResponse.getMessageCode()).body(updateVisitorGenericResponse);
 		} catch (Exception e) {
 			log.error(e.getMessage());

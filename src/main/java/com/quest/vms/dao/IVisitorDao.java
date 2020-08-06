@@ -13,7 +13,7 @@ public interface IVisitorDao {
 
 	public void delete(final Visitor visitor);
 	
-	public void update(final Visitor visitor);
+	public VisitorDto update(final VisitorDto visitorDto);
 
 	public List<VisitorDto> listVisitors(Integer pageNo, Integer pageSize);
 

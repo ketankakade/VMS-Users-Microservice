@@ -46,8 +46,11 @@ public class VisitorDao implements IVisitorDao {
 	}
 	
 	@Override
-	public void update(final Visitor visitor) {
-		visitorRepository.update(visitor);
+	public VisitorDto update(VisitorDto visitorDto) {
+		Visitor visitor = transformDtoToEntity(visitorDto);
+		visitor.setId(visitorDto.getId());
+		visitor = visitorRepository.save(visitor);
+		return transformEntityToDto(visitor);
 	}
 
 	@Override

@@ -5,13 +5,13 @@ import com.quest.vms.dto.VisitorDto;
 
 public interface IVisitorService {
 
-	public GenericResponse<VisitorDto> addVisitor(VisitorDto visitor);
+	public GenericResponse<VisitorDto> addVisitor(final VisitorDto visitor);
 
-	public GenericResponse<VisitorDto> getVisitorById(Integer id);
+	public GenericResponse<VisitorDto> getVisitorById(final Integer id);
 
-	public GenericResponse<?> deleteVisitor(Integer id);
+	public GenericResponse<?> deleteVisitor(final Integer id);
 	
-	public GenericResponse<?> updateVisitor(Integer id);
+	public GenericResponse<VisitorDto> updateVisitor(VisitorDto visitor);
 
-	public GenericResponse<VisitorDto> listVisitors(Integer pageNo, Integer pageSize);
+	public GenericResponse<VisitorDto> listVisitors(final Integer pageNo, final Integer pageSize);
 }

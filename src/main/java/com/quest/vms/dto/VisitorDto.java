@@ -24,7 +24,6 @@ import lombok.NoArgsConstructor;
 @JsonInclude(value = Include.NON_NULL)
 public class VisitorDto {
 
-	@JsonIgnore
 	private Integer id;
 	private long contactNo;
 	private String email;
