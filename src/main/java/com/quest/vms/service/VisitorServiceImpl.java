@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
@@ -59,10 +60,10 @@ public class VisitorServiceImpl implements VisitorService {
 	}
 
 	@Override
-	public GenericResponse<VisitorDto> listVisitors(final Integer pageNo, final Integer pageSize) {
+	public GenericResponse<VisitorDto> listVisitors(final String pageNo, final String pageSize, String sortProperty) {
 		GenericResponse<VisitorDto> genericResponse = new GenericResponse<>(ErrorCodes.BAD_REQUEST_STATUS_CODE,
 				"BAD_REQUEST", null, null);
-		List<VisitorDto> listedVisitors = visitorDao.listVisitors(pageNo, pageSize);
+		List<VisitorDto> listedVisitors = visitorDao.listVisitors(pageNo, pageSize, sortProperty);
 		if (!listedVisitors.isEmpty()) {
 			genericResponse.setMessageCode(HttpStatus.OK.value());
 			genericResponse.setMessage("Success");

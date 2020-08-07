@@ -42,51 +42,55 @@ public class VisitorController {
 
 	@ApiOperation(value = "Add a Visitor to system")
 	@PostMapping(CREATE_VISITOR)
-	public ResponseEntity<GenericResponse<VisitorDto>> addVisitor(@Valid @RequestBody VisitorDto visitor) {
+	public GenericResponse<VisitorDto> addVisitor(@Valid @RequestBody VisitorDto visitor) {
+		GenericResponse<VisitorDto> createVisitorGenericResponse = null;
 		try {
-			GenericResponse<VisitorDto> createVisitorGenericResponse = visitorService.addVisitor(visitor);
-			return ResponseEntity.status(createVisitorGenericResponse.getMessageCode())
-					.body(createVisitorGenericResponse);
+			createVisitorGenericResponse = visitorService.addVisitor(visitor);
+			return createVisitorGenericResponse;
 		} catch (Exception e) {
-			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+			return createVisitorGenericResponse;
 		}
 	}
 
 	@ApiOperation(value = "Get User by Id")
 	@GetMapping(GET_VISITOR + "/{" + ID + "}")
-	public ResponseEntity<GenericResponse<VisitorDto>> getVisitorById(@PathVariable(value = ID) Integer id) {
+	public GenericResponse<VisitorDto> getVisitorById(@PathVariable(value = ID) Integer id) {
+		GenericResponse<VisitorDto> getVisitorGenericResponse = null;
 		try {
-			GenericResponse<VisitorDto> getVisitorGenericResponse = visitorService.getVisitorById(id);
-			return ResponseEntity.status(getVisitorGenericResponse.getMessageCode()).body(getVisitorGenericResponse);
+			getVisitorGenericResponse = visitorService.getVisitorById(id);
+			return getVisitorGenericResponse;
 		} catch (Exception e) {
-			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+			return getVisitorGenericResponse;
 		}
 	}
 
 	@ApiOperation(value = "Get All visitors from system")
 	@GetMapping(LIST_VISITOR)
-	public ResponseEntity<GenericResponse<VisitorDto>> listVisitors(
-			@RequestParam(value = "pageNo", defaultValue = "0", required = false) Integer pageNo,
-			@RequestParam(value = "pageSize", defaultValue = "10", required = false) Integer pageSize) {
+	public GenericResponse<VisitorDto> listVisitors(
+			@RequestParam(value = "pageNo", defaultValue = "0", required = false) String pageNo,
+			@RequestParam(value = "pageSize", defaultValue = "10", required = false) String pageSize,
+			@RequestParam(value = "sort", defaultValue = "firstName", required = false) String sort) {
 		log.info("list visitor");
+		GenericResponse<VisitorDto> listVisitorGenericResponse = null;
 		try {
-			GenericResponse<VisitorDto> listVisitorGenericResponse = visitorService.listVisitors(pageNo, pageSize);
-			return ResponseEntity.status(listVisitorGenericResponse.getMessageCode()).body(listVisitorGenericResponse);
+			listVisitorGenericResponse = visitorService.listVisitors(pageNo, pageSize, sort);
+			return listVisitorGenericResponse;
 		} catch (Exception e) {
-			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+			log.error("error" + e.getMessage());
+			return listVisitorGenericResponse;
 		}
 	}
 
 	@ApiOperation(value = "Delete Visitor from system")
 	@DeleteMapping(DELETE_VISITOR + "/{id}")
-	public ResponseEntity<GenericResponse<?>> deleteVisitor(@PathVariable(value = "id") Integer visitorId) {
+	public GenericResponse<?> deleteVisitor(@PathVariable(value = "id") Integer visitorId) {
+		GenericResponse<?> deleteVisitorGenericResponse = null;
 		try {
-			GenericResponse<?> deleteVisitorGenericResponse = visitorService.deleteVisitor(visitorId);
-			return ResponseEntity.status(deleteVisitorGenericResponse.getMessageCode())
-					.body(deleteVisitorGenericResponse);
+			deleteVisitorGenericResponse = visitorService.deleteVisitor(visitorId);
+			return deleteVisitorGenericResponse;
 		} catch (Exception e) {
 			log.error(e.getMessage());
-			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+			return deleteVisitorGenericResponse;
 		}
 	}
 

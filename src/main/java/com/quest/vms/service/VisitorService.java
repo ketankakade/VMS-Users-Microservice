@@ -1,5 +1,7 @@
 package com.quest.vms.service;
 
+import org.springframework.data.domain.Sort;
+
 import com.quest.vms.common.utils.GenericResponse;
 import com.quest.vms.dto.VisitorDto;
 
@@ -13,5 +15,5 @@ public interface VisitorService {
 	
 	public GenericResponse<VisitorDto> updateVisitor(VisitorDto visitor);
 
-	public GenericResponse<VisitorDto> listVisitors(final Integer pageNo, final Integer pageSize);
+	public GenericResponse<VisitorDto> listVisitors(final String pageNo, final String pageSize, String sortProperty);
 }

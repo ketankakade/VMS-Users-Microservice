@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Component;
 
 import com.quest.vms.dto.VisitorDto;
@@ -68,9 +69,9 @@ public class VisitorDaoImpl implements VisitorDao {
 	}
 
 	@Override
-	public List<VisitorDto> listVisitors(Integer pageNo, Integer pageSize) {
+	public List<VisitorDto> listVisitors(String pageNo, String pageSize, String sortProperty) {
 		List<VisitorDto> visitorDTOList = new ArrayList<>();
-		Pageable paging = PageRequest.of(pageNo, pageSize);
+		Pageable paging = PageRequest.of(Integer.parseInt(pageNo), Integer.parseInt(pageSize), Sort.by(sortProperty));
 		Page<Visitor> pagedResult = visitorRepository.findAll(paging);
 		List<Visitor> listedVisitors = pagedResult.toList();
 		log.info("listedVisitors size " + listedVisitors.size());
