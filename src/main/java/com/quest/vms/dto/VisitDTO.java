@@ -14,13 +14,13 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class VisitDto {
+public class VisitDTO {
 
 	@JsonIgnore
 	private Integer visitId;
 	private Date visitDate;
-	private ContactPersonDto contactPerson;
-	private TimeSlotDto timeSlot;
-	private List<DeviceDto> devices;
+	private ContactPersonDTO contactPerson;
+	private TimeSlotDTO timeSlot;
+	private List<DeviceDTO> devices;
 
 }

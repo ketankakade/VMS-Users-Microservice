@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class DeviceDto {
+public class DeviceDTO {
 	
 	@JsonIgnore
 	private Integer deviceId;	

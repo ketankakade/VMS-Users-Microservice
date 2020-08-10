@@ -1,7 +1,6 @@
 package com.quest.vms.dto;
 
-import java.util.List;
-
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 
@@ -15,17 +14,13 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @JsonInclude(value = Include.NON_NULL)
-public class VisitorDto {
-
-	private Integer visitorId;
-	private long contactNo;
-	private String email;
+public class ContactPersonDTO {
+	
+	@JsonIgnore
+	private Integer contactPersonId;
 	private String firstName;
 	private String lastName;
-	private String idProof;
-	private String placeOfVisit;
-	private String reasonForVisit;
-	private String visitorType;
-	private List<VisitDto> visits;
+	private long contactNo;
+	private String email;
 
 }

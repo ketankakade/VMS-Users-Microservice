@@ -11,8 +11,8 @@ import org.springframework.stereotype.Service;
 
 import com.quest.vms.common.utils.ErrorCodes;
 import com.quest.vms.common.utils.GenericResponse;
-import com.quest.vms.dao.VisitorDao;
-import com.quest.vms.dto.VisitorDto;
+import com.quest.vms.dao.VisitorDAO;
+import com.quest.vms.dto.VisitorDTO;
 import com.quest.vms.entity.Visitor;
 import com.quest.vms.repository.VisitorRepository;
 
@@ -23,18 +23,18 @@ import lombok.extern.slf4j.Slf4j;
 public class VisitorServiceImpl implements VisitorService {
 
 	@Autowired
-	private VisitorDao visitorDao;
+	private VisitorDAO visitorDao;
 
 	@Autowired
 	private VisitorRepository visitorRepository;
 
 	@Override
-	public GenericResponse<VisitorDto> addVisitor(final VisitorDto visitorDto) {
-		GenericResponse<VisitorDto> genericResponse = new GenericResponse<>(ErrorCodes.BAD_REQUEST_STATUS_CODE,
+	public GenericResponse<VisitorDTO> addVisitor(final VisitorDTO visitorDto) {
+		GenericResponse<VisitorDTO> genericResponse = new GenericResponse<>(ErrorCodes.BAD_REQUEST_STATUS_CODE,
 				"BAD_REQUEST", null, null);
 		log.info("save visitor");
 		if (visitorDto != null) {
-			VisitorDto visitor = visitorDao.addVisitor(visitorDto);
+			VisitorDTO visitor = visitorDao.addVisitor(visitorDto);
 			genericResponse.setMessageCode(HttpStatus.OK.value());
 			genericResponse.setMessage("Success");
 			genericResponse.setData(Collections.singletonList(visitor));
@@ -45,10 +45,10 @@ public class VisitorServiceImpl implements VisitorService {
 	}
 
 	@Override
-	public GenericResponse<VisitorDto> getVisitorById(final Integer visitorId) {
-		GenericResponse<VisitorDto> genericResponse = new GenericResponse<>(ErrorCodes.BAD_REQUEST_STATUS_CODE,
+	public GenericResponse<VisitorDTO> getVisitorById(final Integer visitorId) {
+		GenericResponse<VisitorDTO> genericResponse = new GenericResponse<>(ErrorCodes.BAD_REQUEST_STATUS_CODE,
 				"BAD_REQUEST", null, null);
-		VisitorDto visitorDTO = visitorDao.getVisitorById(visitorId);
+		VisitorDTO visitorDTO = visitorDao.getVisitorById(visitorId);
 		if (visitorDTO != null) {
 			genericResponse.setMessageCode(HttpStatus.OK.value());
 			genericResponse.setMessage("Success");
@@ -60,10 +60,10 @@ public class VisitorServiceImpl implements VisitorService {
 	}
 
 	@Override
-	public GenericResponse<VisitorDto> listVisitors(final String pageNo, final String pageSize, String sortProperty) {
-		GenericResponse<VisitorDto> genericResponse = new GenericResponse<>(ErrorCodes.BAD_REQUEST_STATUS_CODE,
+	public GenericResponse<VisitorDTO> listVisitors(final String pageNo, final String pageSize, String sortProperty) {
+		GenericResponse<VisitorDTO> genericResponse = new GenericResponse<>(ErrorCodes.BAD_REQUEST_STATUS_CODE,
 				"BAD_REQUEST", null, null);
-		List<VisitorDto> listedVisitors = visitorDao.listVisitors(pageNo, pageSize, sortProperty);
+		List<VisitorDTO> listedVisitors = visitorDao.listVisitors(pageNo, pageSize, sortProperty);
 		if (!listedVisitors.isEmpty()) {
 			genericResponse.setMessageCode(HttpStatus.OK.value());
 			genericResponse.setMessage("Success");
@@ -92,13 +92,13 @@ public class VisitorServiceImpl implements VisitorService {
 	}
 
 	@Override
-	public GenericResponse<VisitorDto> updateVisitor(VisitorDto visitorDto) {
-		GenericResponse<VisitorDto> genericResponse = new GenericResponse<>(ErrorCodes.BAD_REQUEST_STATUS_CODE,
+	public GenericResponse<VisitorDTO> updateVisitor(VisitorDTO visitorDto) {
+		GenericResponse<VisitorDTO> genericResponse = new GenericResponse<>(ErrorCodes.BAD_REQUEST_STATUS_CODE,
 				"BAD_REQUEST", null, null);
 		if (visitorDto == null) {
 			genericResponse.setMessage("visitor data is missing in request");
 		} else {
-			VisitorDto visitor = visitorDao.update(visitorDto);
+			VisitorDTO visitor = visitorDao.update(visitorDto);
 			if(visitor == null) {
 				genericResponse.setMessage("visitor is not found");
 			}else {

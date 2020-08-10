@@ -17,7 +17,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class TimeSlotDto {
+public class TimeSlotDTO {
 
 	@JsonIgnore
 	private Integer timeSlotId;

@@ -13,7 +13,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Component;
 
-import com.quest.vms.dto.VisitorDto;
+import com.quest.vms.dto.VisitorDTO;
 import com.quest.vms.entity.Visitor;
 import com.quest.vms.repository.VisitorRepository;
 
@@ -21,7 +21,7 @@ import lombok.extern.slf4j.Slf4j;
 
 @Component
 @Slf4j
-public class VisitorDaoImpl implements VisitorDao {
+public class VisitorDAOImpl implements VisitorDAO {
 
 	@Autowired
 	private VisitorRepository visitorRepository;
@@ -29,7 +29,7 @@ public class VisitorDaoImpl implements VisitorDao {
 	private ModelMapper modelMapper = new ModelMapper();
 
 	@Override
-	public VisitorDto addVisitor(final VisitorDto visitorDto) {
+	public VisitorDTO addVisitor(final VisitorDTO visitorDto) {
 		log.info("Save visitor details::Visitor: {}", visitorDto);
 		Visitor visitor = transformDtoToEntity(visitorDto);
 		visitor = visitorRepository.save(visitor);
@@ -43,7 +43,7 @@ public class VisitorDaoImpl implements VisitorDao {
 	}
 
 	@Override
-	public VisitorDto update(VisitorDto visitorDto) {
+	public VisitorDTO update(VisitorDTO visitorDto) {
 		log.info("Update visitor details::Visitor: {}", visitorDto.getVisitorId());
 		Optional<Visitor> visitor = visitorRepository.findById(visitorDto.getVisitorId());
 		if (visitor == null) {
@@ -58,8 +58,8 @@ public class VisitorDaoImpl implements VisitorDao {
 	}
 
 	@Override
-	public VisitorDto getVisitorById(final Integer id) {
-		VisitorDto visitorDto = null;
+	public VisitorDTO getVisitorById(final Integer id) {
+		VisitorDTO visitorDto = null;
 		Optional<Visitor> visitorOptional = visitorRepository.findById(id);
 		if (visitorOptional.isPresent()) {
 			Visitor visitor = visitorOptional.get();
@@ -69,27 +69,27 @@ public class VisitorDaoImpl implements VisitorDao {
 	}
 
 	@Override
-	public List<VisitorDto> listVisitors(String pageNo, String pageSize, String sortProperty) {
-		List<VisitorDto> visitorDTOList = new ArrayList<>();
+	public List<VisitorDTO> listVisitors(String pageNo, String pageSize, String sortProperty) {
+		List<VisitorDTO> visitorDTOList = new ArrayList<>();
 		Pageable paging = PageRequest.of(Integer.parseInt(pageNo), Integer.parseInt(pageSize), Sort.by(sortProperty));
 		Page<Visitor> pagedResult = visitorRepository.findAll(paging);
 		List<Visitor> listedVisitors = pagedResult.toList();
 		log.info("listedVisitors size " + listedVisitors.size());
 		for (Visitor visitor : listedVisitors) {
-			VisitorDto visitorDTO = transformEntityToDto(visitor);
+			VisitorDTO visitorDTO = transformEntityToDto(visitor);
 			visitorDTOList.add(visitorDTO);
 		}
 		return visitorDTOList;
 	}
 
-	public Visitor transformDtoToEntity(VisitorDto dto) {
+	public Visitor transformDtoToEntity(VisitorDTO dto) {
 		modelMapper.getConfiguration().setMatchingStrategy(MatchingStrategies.LOOSE);
 		return modelMapper.map(dto, Visitor.class);
 	}
 
-	public VisitorDto transformEntityToDto(Visitor entity) {
+	public VisitorDTO transformEntityToDto(Visitor entity) {
 		modelMapper.getConfiguration().setMatchingStrategy(MatchingStrategies.LOOSE);
-		return modelMapper.map(entity, VisitorDto.class);
+		return modelMapper.map(entity, VisitorDTO.class);
 	}
 
 }

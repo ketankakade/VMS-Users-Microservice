@@ -24,7 +24,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.quest.vms.common.utils.GenericResponse;
-import com.quest.vms.dto.VisitorDto;
+import com.quest.vms.dto.VisitorDTO;
 import com.quest.vms.service.VisitorService;
 
 import io.swagger.annotations.Api;
@@ -42,8 +42,8 @@ public class VisitorController {
 
 	@ApiOperation(value = "Add a Visitor to system")
 	@PostMapping(CREATE_VISITOR)
-	public GenericResponse<VisitorDto> addVisitor(@Valid @RequestBody VisitorDto visitor) {
-		GenericResponse<VisitorDto> createVisitorGenericResponse = null;
+	public GenericResponse<VisitorDTO> addVisitor(@Valid @RequestBody VisitorDTO visitor) {
+		GenericResponse<VisitorDTO> createVisitorGenericResponse = null;
 		try {
 			createVisitorGenericResponse = visitorService.addVisitor(visitor);
 			return createVisitorGenericResponse;
@@ -54,8 +54,8 @@ public class VisitorController {
 
 	@ApiOperation(value = "Get User by Id")
 	@GetMapping(GET_VISITOR + "/{" + ID + "}")
-	public GenericResponse<VisitorDto> getVisitorById(@PathVariable(value = ID) Integer id) {
-		GenericResponse<VisitorDto> getVisitorGenericResponse = null;
+	public GenericResponse<VisitorDTO> getVisitorById(@PathVariable(value = ID) Integer id) {
+		GenericResponse<VisitorDTO> getVisitorGenericResponse = null;
 		try {
 			getVisitorGenericResponse = visitorService.getVisitorById(id);
 			return getVisitorGenericResponse;
@@ -66,12 +66,12 @@ public class VisitorController {
 
 	@ApiOperation(value = "Get All visitors from system")
 	@GetMapping(LIST_VISITOR)
-	public GenericResponse<VisitorDto> listVisitors(
+	public GenericResponse<VisitorDTO> listVisitors(
 			@RequestParam(value = "pageNo", defaultValue = "0", required = false) String pageNo,
 			@RequestParam(value = "pageSize", defaultValue = "10", required = false) String pageSize,
 			@RequestParam(value = "sort", defaultValue = "firstName", required = false) String sort) {
 		log.info("list visitor");
-		GenericResponse<VisitorDto> listVisitorGenericResponse = null;
+		GenericResponse<VisitorDTO> listVisitorGenericResponse = null;
 		try {
 			listVisitorGenericResponse = visitorService.listVisitors(pageNo, pageSize, sort);
 			return listVisitorGenericResponse;
@@ -96,9 +96,9 @@ public class VisitorController {
 
 	@ApiOperation(value = "Update Visitor details")
 	@PutMapping(UPDATE_VISITOR)
-	public ResponseEntity<GenericResponse<VisitorDto>> updateVisitor(@Valid @RequestBody VisitorDto visitor) {
+	public ResponseEntity<GenericResponse<VisitorDTO>> updateVisitor(@Valid @RequestBody VisitorDTO visitor) {
 		try {
-			GenericResponse<VisitorDto> updateVisitorGenericResponse = visitorService.updateVisitor(visitor);
+			GenericResponse<VisitorDTO> updateVisitorGenericResponse = visitorService.updateVisitor(visitor);
 			return ResponseEntity.status(updateVisitorGenericResponse.getMessageCode())
 					.body(updateVisitorGenericResponse);
 		} catch (Exception e) {
