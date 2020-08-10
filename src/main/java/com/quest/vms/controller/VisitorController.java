@@ -67,13 +67,13 @@ public class VisitorController {
 	@ApiOperation(value = "Get All visitors from system")
 	@GetMapping(LIST_VISITOR)
 	public GenericResponse<VisitorDTO> listVisitors(
-			@RequestParam(value = "pageNo", defaultValue = "0", required = false) String pageNo,
-			@RequestParam(value = "pageSize", defaultValue = "10", required = false) String pageSize,
-			@RequestParam(value = "sort", defaultValue = "firstName", required = false) String sort) {
+			@RequestParam(value = "index", defaultValue = "0", required = false) String index,
+			@RequestParam(value = "size", defaultValue = "10", required = false) String size,
+			@RequestParam(value = "sortBy", defaultValue = "firstName", required = false) String sortBy) {
 		log.info("list visitor");
 		GenericResponse<VisitorDTO> listVisitorGenericResponse = null;
 		try {
-			listVisitorGenericResponse = visitorService.listVisitors(pageNo, pageSize, sort);
+			listVisitorGenericResponse = visitorService.listVisitors(index, size, sortBy);
 			return listVisitorGenericResponse;
 		} catch (Exception e) {
 			log.error("error" + e.getMessage());

@@ -5,7 +5,6 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
@@ -60,7 +59,7 @@ public class VisitorServiceImpl implements VisitorService {
 	}
 
 	@Override
-	public GenericResponse<VisitorDTO> listVisitors(final String pageNo, final String pageSize, String sortProperty) {
+	public GenericResponse<VisitorDTO> listVisitors(final String pageNo, final String pageSize, final String sortProperty) {
 		GenericResponse<VisitorDTO> genericResponse = new GenericResponse<>(ErrorCodes.BAD_REQUEST_STATUS_CODE,
 				"BAD_REQUEST", null, null);
 		List<VisitorDTO> listedVisitors = visitorDao.listVisitors(pageNo, pageSize, sortProperty);
@@ -75,7 +74,7 @@ public class VisitorServiceImpl implements VisitorService {
 	}
 
 	@Override
-	public GenericResponse<?> deleteVisitor(Integer visitorId) {
+	public GenericResponse<?> deleteVisitor(final Integer visitorId) {
 		GenericResponse<?> genericResponse = new GenericResponse<>(ErrorCodes.BAD_REQUEST_STATUS_CODE, "BAD_REQUEST",
 				null, null);
 		Optional<Visitor> visitorToBeDeleted = visitorRepository.findById(visitorId);
@@ -99,9 +98,9 @@ public class VisitorServiceImpl implements VisitorService {
 			genericResponse.setMessage("visitor data is missing in request");
 		} else {
 			VisitorDTO visitor = visitorDao.update(visitorDto);
-			if(visitor == null) {
+			if (visitor == null) {
 				genericResponse.setMessage("visitor is not found");
-			}else {
+			} else {
 				genericResponse.setMessageCode(HttpStatus.OK.value());
 				genericResponse.setMessage("Success");
 				genericResponse.setData(Collections.singletonList(visitor));
