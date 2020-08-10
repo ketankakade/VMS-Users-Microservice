@@ -20,7 +20,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class GenericResponse<T> {
 
-    private int messageCode;
+    private int statusCode;
     private String message;
     private String errorCode;
     private List<T> data;

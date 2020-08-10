@@ -34,7 +34,7 @@ public class VisitorServiceImpl implements VisitorService {
 		log.info("save visitor");
 		if (visitorDto != null) {
 			VisitorDTO visitor = visitorDao.addVisitor(visitorDto);
-			genericResponse.setMessageCode(HttpStatus.OK.value());
+			genericResponse.setStatusCode(HttpStatus.OK.value());
 			genericResponse.setMessage("Success");
 			genericResponse.setData(Collections.singletonList(visitor));
 		} else {
@@ -49,7 +49,7 @@ public class VisitorServiceImpl implements VisitorService {
 				"BAD_REQUEST", null, null);
 		VisitorDTO visitorDTO = visitorDao.getVisitorById(visitorId);
 		if (visitorDTO != null) {
-			genericResponse.setMessageCode(HttpStatus.OK.value());
+			genericResponse.setStatusCode(HttpStatus.OK.value());
 			genericResponse.setMessage("Success");
 			genericResponse.setData(Collections.singletonList(visitorDTO));
 		} else {
@@ -64,7 +64,7 @@ public class VisitorServiceImpl implements VisitorService {
 				"BAD_REQUEST", null, null);
 		List<VisitorDTO> listedVisitors = visitorDao.listVisitors(pageNo, pageSize, sortProperty);
 		if (!listedVisitors.isEmpty()) {
-			genericResponse.setMessageCode(HttpStatus.OK.value());
+			genericResponse.setStatusCode(HttpStatus.OK.value());
 			genericResponse.setMessage("Success");
 			genericResponse.setData(listedVisitors);
 		} else {
@@ -84,7 +84,7 @@ public class VisitorServiceImpl implements VisitorService {
 		} else {
 			Visitor visitor = visitorToBeDeleted.get();
 			visitorDao.delete(visitor);
-			genericResponse.setMessageCode(HttpStatus.OK.value());
+			genericResponse.setStatusCode(HttpStatus.OK.value());
 			genericResponse.setMessage("Success");
 		}
 		return genericResponse;
@@ -101,7 +101,7 @@ public class VisitorServiceImpl implements VisitorService {
 			if (visitor == null) {
 				genericResponse.setMessage("visitor is not found");
 			} else {
-				genericResponse.setMessageCode(HttpStatus.OK.value());
+				genericResponse.setStatusCode(HttpStatus.OK.value());
 				genericResponse.setMessage("Success");
 				genericResponse.setData(Collections.singletonList(visitor));
 			}

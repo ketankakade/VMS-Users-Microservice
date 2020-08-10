@@ -29,7 +29,7 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
 		}
 		GenericResponse<Object> response = GenericResponse.builder().build();
 		response.setMessage(details.toString());
-		response.setMessageCode(HttpStatus.BAD_REQUEST.value());
+		response.setStatusCode(HttpStatus.BAD_REQUEST.value());
 		return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
 	}
 }

@@ -1,11 +1,7 @@
 package com.quest.vms.controller;
 
-import static com.quest.vms.common.utils.VmsConstants.CREATE_VISITOR;
-import static com.quest.vms.common.utils.VmsConstants.DELETE_VISITOR;
-import static com.quest.vms.common.utils.VmsConstants.GET_VISITOR;
+import static com.quest.vms.common.utils.VmsConstants.VISITOR;
 import static com.quest.vms.common.utils.VmsConstants.ID;
-import static com.quest.vms.common.utils.VmsConstants.LIST_VISITOR;
-import static com.quest.vms.common.utils.VmsConstants.UPDATE_VISITOR;
 import static com.quest.vms.common.utils.VmsConstants.VISITOR_URL_PATH;
 
 import javax.validation.Valid;
@@ -41,7 +37,7 @@ public class VisitorController {
 	private VisitorService visitorService;
 
 	@ApiOperation(value = "Add a Visitor to system")
-	@PostMapping(CREATE_VISITOR)
+	@PostMapping(VISITOR)
 	public GenericResponse<VisitorDTO> addVisitor(@Valid @RequestBody VisitorDTO visitor) {
 		GenericResponse<VisitorDTO> createVisitorGenericResponse = null;
 		try {
@@ -53,7 +49,7 @@ public class VisitorController {
 	}
 
 	@ApiOperation(value = "Get User by Id")
-	@GetMapping(GET_VISITOR + "/{" + ID + "}")
+	@GetMapping(VISITOR + "/{" + ID + "}")
 	public GenericResponse<VisitorDTO> getVisitorById(@PathVariable(value = ID) Integer id) {
 		GenericResponse<VisitorDTO> getVisitorGenericResponse = null;
 		try {
@@ -65,7 +61,7 @@ public class VisitorController {
 	}
 
 	@ApiOperation(value = "Get All visitors from system")
-	@GetMapping(LIST_VISITOR)
+	@GetMapping(VISITOR)
 	public GenericResponse<VisitorDTO> listVisitors(
 			@RequestParam(value = "index", defaultValue = "0", required = false) String index,
 			@RequestParam(value = "size", defaultValue = "10", required = false) String size,
@@ -82,7 +78,7 @@ public class VisitorController {
 	}
 
 	@ApiOperation(value = "Delete Visitor from system")
-	@DeleteMapping(DELETE_VISITOR + "/{id}")
+	@DeleteMapping(VISITOR + "/{id}")
 	public GenericResponse<?> deleteVisitor(@PathVariable(value = "id") Integer visitorId) {
 		GenericResponse<?> deleteVisitorGenericResponse = null;
 		try {
@@ -95,11 +91,11 @@ public class VisitorController {
 	}
 
 	@ApiOperation(value = "Update Visitor details")
-	@PutMapping(UPDATE_VISITOR)
+	@PutMapping(VISITOR)
 	public ResponseEntity<GenericResponse<VisitorDTO>> updateVisitor(@Valid @RequestBody VisitorDTO visitor) {
 		try {
 			GenericResponse<VisitorDTO> updateVisitorGenericResponse = visitorService.updateVisitor(visitor);
-			return ResponseEntity.status(updateVisitorGenericResponse.getMessageCode())
+			return ResponseEntity.status(updateVisitorGenericResponse.getStatusCode())
 					.body(updateVisitorGenericResponse);
 		} catch (Exception e) {
 			log.error(e.getMessage());
