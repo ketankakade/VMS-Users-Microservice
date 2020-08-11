@@ -9,4 +9,6 @@ import com.quest.vms.entity.Visitor;
 @Repository
 public interface VisitorRepository
 		extends JpaRepository<Visitor, Integer>, PagingAndSortingRepository<Visitor, Integer> {
+	
+	public Visitor findByEmailIgnoreCase(String email);
 }

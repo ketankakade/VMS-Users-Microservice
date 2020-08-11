@@ -98,13 +98,15 @@ public class VisitorServiceImpl implements VisitorService {
 		if (visitorDto == null) {
 			genericResponse.setMessage("visitor data is missing in request");
 		} else {
-			VisitorDTO visitor = visitorDao.update(visitorDto);
-			if (visitor == null) {
-				genericResponse.setMessage("visitor is not found");
-			} else {
+			log.info("hello update id " + visitorDto.getVisitorId());
+			Optional<Visitor> visitorOptional = visitorRepository.findById(visitorDto.getVisitorId());
+			if (visitorOptional.isPresent()) {
+				VisitorDTO visitor = visitorDao.update(visitorDto);
 				genericResponse.setStatusCode(HttpStatus.OK.value());
 				genericResponse.setMessage("Success");
 				genericResponse.setData(Collections.singletonList(visitor));
+			} else {
+				genericResponse.setMessage("visitor is not found");
 			}
 		}
 		return genericResponse;

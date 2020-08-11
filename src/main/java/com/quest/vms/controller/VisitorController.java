@@ -1,8 +1,10 @@
 package com.quest.vms.controller;
 
-import static com.quest.vms.common.utils.VmsConstants.ID;
 import static com.quest.vms.common.utils.VmsConstants.VISITOR;
+import static com.quest.vms.common.utils.VmsConstants.ID;
 import static com.quest.vms.common.utils.VmsConstants.VISITOR_URL_PATH;
+
+import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
@@ -66,7 +68,7 @@ public class VisitorController {
 			@RequestParam(value = "size", defaultValue = "10", required = false) String size,
 			@RequestParam(value = "sortBy", defaultValue = "firstName", required = false) String sortBy,
 			@RequestParam(value = "orderBy", defaultValue = "ASC", required = false) Sort.Direction orderBy) {
-		log.info("list visitor");
+		log.info("list visitor"); 
 		GenericResponse<VisitorDTO> listVisitorGenericResponse = null;
 		try {
 			listVisitorGenericResponse = visitorService.listVisitors(index, size, sortBy, orderBy);
