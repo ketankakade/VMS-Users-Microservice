@@ -69,9 +69,9 @@ public class VisitorDAOImpl implements VisitorDAO {
 	}
 
 	@Override
-	public List<VisitorDTO> listVisitors(String pageNo, String pageSize, String sortProperty) {
+	public List<VisitorDTO> listVisitors(String pageNo, String pageSize, String sortProperty, Sort.Direction orderBy) {
 		List<VisitorDTO> visitorDTOList = new ArrayList<>();
-		Pageable paging = PageRequest.of(Integer.parseInt(pageNo), Integer.parseInt(pageSize), Sort.by(sortProperty));
+		Pageable paging = PageRequest.of(Integer.parseInt(pageNo), Integer.parseInt(pageSize), Sort.by(orderBy, sortProperty));
 		Page<Visitor> pagedResult = visitorRepository.findAll(paging);
 		List<Visitor> listedVisitors = pagedResult.toList();
 		log.info("listedVisitors size " + listedVisitors.size());

@@ -7,6 +7,7 @@ import static com.quest.vms.common.utils.VmsConstants.VISITOR_URL_PATH;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -65,11 +66,12 @@ public class VisitorController {
 	public GenericResponse<VisitorDTO> listVisitors(
 			@RequestParam(value = "index", defaultValue = "0", required = false) String index,
 			@RequestParam(value = "size", defaultValue = "10", required = false) String size,
-			@RequestParam(value = "sortBy", defaultValue = "firstName", required = false) String sortBy) {
-		log.info("list visitor");
+			@RequestParam(value = "sortBy", defaultValue = "firstName", required = false) String sortBy,
+			@RequestParam(value = "orderBy", defaultValue = "ASC", required = false) Sort.Direction orderBy) {
+		log.info("list visitor"); 
 		GenericResponse<VisitorDTO> listVisitorGenericResponse = null;
 		try {
-			listVisitorGenericResponse = visitorService.listVisitors(index, size, sortBy);
+			listVisitorGenericResponse = visitorService.listVisitors(index, size, sortBy, orderBy);
 			return listVisitorGenericResponse;
 		} catch (Exception e) {
 			log.error("error" + e.getMessage());
