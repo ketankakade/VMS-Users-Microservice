@@ -20,7 +20,7 @@ public class ContactPersonDTO {
 	private Integer contactPersonId;
 	private String firstName;
 	private String lastName;
-	private long contactNo;
+	private String contactNo;
 	private String email;
 
 }

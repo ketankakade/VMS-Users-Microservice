@@ -18,7 +18,7 @@ import lombok.NoArgsConstructor;
 public class VisitorDTO {
 
 	private Integer visitorId;
-	private long contactNo;
+	private String contactNo;
 	private String email;
 	private String firstName;
 	private String lastName;

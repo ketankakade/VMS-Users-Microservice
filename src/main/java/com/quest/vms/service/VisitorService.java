@@ -1,6 +1,5 @@
 package com.quest.vms.service;
 
-import org.springframework.data.domain.Sort;
 import org.springframework.data.domain.Sort.Direction;
 
 import com.quest.vms.common.utils.GenericResponse;

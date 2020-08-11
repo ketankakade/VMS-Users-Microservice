@@ -12,8 +12,6 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
-import javax.validation.constraints.Email;
-import javax.validation.constraints.NotNull;
 
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
@@ -49,36 +47,27 @@ public class Visitor {
 	@Column(name = VISITOR_ID)
 	private Integer visitorId;
 
-	@NotNull
 	@Column(name = FIRST_NAME)
 	private String firstName;
 
-	@NotNull
 	@Column(name = LAST_NAME)
 	private String lastName;
 
-	@NotNull
-	@Email
 	@Column(name = EMAIL)
 	private String email;
 
-	@NotNull
 	@Column(name = CONTACT_NUMBER)
-	private long contactNo;
+	private String contactNo;
 
-	@NotNull
 	@Column(name = ID_PROOF)
 	private String idProof;
 
-	@NotNull
 	@Column(name = PROOF_OF_VISIT)
 	private String placeOfVisit;
 
-	@NotNull
 	@Column(name = REASON_FOR_VISIT)
 	private String reasonForVisit;
 
-	@NotNull
 	@Column(name = VISITOR_TYPE)
 	private String visitorType;
 

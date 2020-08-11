@@ -1,10 +1,8 @@
 package com.quest.vms.controller;
 
-import static com.quest.vms.common.utils.VmsConstants.VISITOR;
 import static com.quest.vms.common.utils.VmsConstants.ID;
+import static com.quest.vms.common.utils.VmsConstants.VISITOR;
 import static com.quest.vms.common.utils.VmsConstants.VISITOR_URL_PATH;
-
-import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
@@ -39,7 +37,7 @@ public class VisitorController {
 
 	@ApiOperation(value = "Add a Visitor to system")
 	@PostMapping(VISITOR)
-	public GenericResponse<VisitorDTO> addVisitor(@Valid @RequestBody VisitorDTO visitor) {
+	public GenericResponse<VisitorDTO> addVisitor(@RequestBody VisitorDTO visitor) {
 		GenericResponse<VisitorDTO> createVisitorGenericResponse = null;
 		try {
 			createVisitorGenericResponse = visitorService.addVisitor(visitor);
@@ -68,7 +66,7 @@ public class VisitorController {
 			@RequestParam(value = "size", defaultValue = "10", required = false) String size,
 			@RequestParam(value = "sortBy", defaultValue = "firstName", required = false) String sortBy,
 			@RequestParam(value = "orderBy", defaultValue = "ASC", required = false) Sort.Direction orderBy) {
-		log.info("list visitor"); 
+		log.info("list visitor");
 		GenericResponse<VisitorDTO> listVisitorGenericResponse = null;
 		try {
 			listVisitorGenericResponse = visitorService.listVisitors(index, size, sortBy, orderBy);
@@ -94,7 +92,7 @@ public class VisitorController {
 
 	@ApiOperation(value = "Update Visitor details")
 	@PutMapping(VISITOR)
-	public ResponseEntity<GenericResponse<VisitorDTO>> updateVisitor(@Valid @RequestBody VisitorDTO visitor) {
+	public ResponseEntity<GenericResponse<VisitorDTO>> updateVisitor(@RequestBody VisitorDTO visitor) {
 		try {
 			GenericResponse<VisitorDTO> updateVisitorGenericResponse = visitorService.updateVisitor(visitor);
 			return ResponseEntity.status(updateVisitorGenericResponse.getStatusCode())
