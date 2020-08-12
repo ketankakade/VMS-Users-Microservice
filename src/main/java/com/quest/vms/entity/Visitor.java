@@ -47,25 +47,25 @@ public class Visitor {
 	@Column(name = VISITOR_ID)
 	private Integer visitorId;
 
-	@Column(name = FIRST_NAME)
+	@Column(name = FIRST_NAME, columnDefinition = "text", nullable = false)
 	private String firstName;
 
-	@Column(name = LAST_NAME)
+	@Column(name = LAST_NAME, columnDefinition = "text", nullable = false)
 	private String lastName;
 
-	@Column(name = EMAIL)
+	@Column(name = EMAIL, columnDefinition = "text", nullable = false, unique = true)
 	private String email;
 
-	@Column(name = CONTACT_NUMBER)
+	@Column(name = CONTACT_NUMBER, length = 15, nullable = false)
 	private String contactNo;
 
-	@Column(name = ID_PROOF)
+	@Column(name = ID_PROOF, nullable = false)
 	private String idProof;
 
 	@Column(name = PROOF_OF_VISIT)
 	private String placeOfVisit;
 
-	@Column(name = REASON_FOR_VISIT)
+	@Column(name = REASON_FOR_VISIT, nullable = false)
 	private String reasonForVisit;
 
 	@Column(name = VISITOR_TYPE)
