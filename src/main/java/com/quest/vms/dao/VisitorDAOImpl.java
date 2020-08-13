@@ -14,6 +14,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Component;
 
 import com.quest.vms.dto.VisitorDTO;
+import com.quest.vms.dto.VisitorsCountDTO;
 import com.quest.vms.entity.Visitor;
 import com.quest.vms.repository.VisitorRepository;
 
@@ -81,6 +82,15 @@ public class VisitorDAOImpl implements VisitorDAO {
 		}
 		return visitorDTOList;
 	}
+	
+	@Override
+	public VisitorsCountDTO listVisitorsCount() {
+		 VisitorsCountDTO visitorCountDTO = new VisitorsCountDTO();	
+		 
+		 visitorCountDTO.setTotalVisitorsVisitedTodayCount(visitorRepository.findAll().size());
+		return visitorCountDTO;
+	}
+	
 
 	public Visitor transformDtoToEntity(VisitorDTO dto) {
 		modelMapper.getConfiguration().setMatchingStrategy(MatchingStrategies.LOOSE);

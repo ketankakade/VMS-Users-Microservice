@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.quest.vms.common.utils.GenericResponse;
 import com.quest.vms.dto.VisitorDTO;
+import com.quest.vms.dto.VisitorsCountDTO;
 import com.quest.vms.service.VisitorService;
 
 import io.swagger.annotations.Api;
@@ -34,6 +35,7 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class VisitorController {
 
+	private static final String VISITORCOUNT = "/visitorcount";
 	@Autowired
 	private VisitorService visitorService;
 
@@ -76,6 +78,22 @@ public class VisitorController {
 		} catch (Exception e) {
 			log.error("error" + e.getMessage());
 			return listVisitorGenericResponse;
+		}
+	}
+
+	
+	@ApiOperation(value = "Get visitors count to display on dashboard")
+	@GetMapping(VISITORCOUNT)
+	public GenericResponse<VisitorsCountDTO> getVisitorsCount()
+			{
+		log.info("list visitor count"); 
+		GenericResponse<VisitorsCountDTO> visitorCountGenericResponse = null;
+		try {
+			visitorCountGenericResponse = visitorService.listVisitorsCount();
+			return visitorCountGenericResponse;
+		} catch (Exception e) {
+			log.error("error" + e.getMessage());
+			return visitorCountGenericResponse;
 		}
 	}
 

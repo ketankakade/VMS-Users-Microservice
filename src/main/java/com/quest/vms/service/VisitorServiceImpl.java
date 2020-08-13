@@ -13,6 +13,7 @@ import com.quest.vms.common.utils.ErrorCodes;
 import com.quest.vms.common.utils.GenericResponse;
 import com.quest.vms.dao.VisitorDAO;
 import com.quest.vms.dto.VisitorDTO;
+import com.quest.vms.dto.VisitorsCountDTO;
 import com.quest.vms.entity.Visitor;
 import com.quest.vms.repository.VisitorRepository;
 
@@ -71,6 +72,19 @@ public class VisitorServiceImpl implements VisitorService {
 		} else {
 			genericResponse.setMessage("Visitor List is empty");
 		}
+		return genericResponse;
+	}
+	
+	@Override
+	public GenericResponse<VisitorsCountDTO> listVisitorsCount() 	{
+		GenericResponse<VisitorsCountDTO> genericResponse = new GenericResponse<>(ErrorCodes.BAD_REQUEST_STATUS_CODE,
+				"BAD_REQUEST", null, null);
+			VisitorsCountDTO listedVisitorsCount = visitorDao.listVisitorsCount();
+		
+			genericResponse.setStatusCode(HttpStatus.OK.value());
+			genericResponse.setMessage("Success");
+			genericResponse.setData(Collections.singletonList(listedVisitorsCount));
+		
 		return genericResponse;
 	}
 
