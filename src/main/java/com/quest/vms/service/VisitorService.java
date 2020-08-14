@@ -19,6 +19,8 @@ public interface VisitorService {
 	public GenericResponse<VisitorDTO> listVisitors(String index, String size, String sortBy, Direction orderBy);
 	
 	public GenericResponse<VisitorsCountDTO> listVisitorsCount();
-	
+
+	public GenericResponse<VisitorDTO> searchVisitor(String visitorType, String startDate, String endDate,
+			String visitorName, String contactPersonName, String isActive);
 	
 }

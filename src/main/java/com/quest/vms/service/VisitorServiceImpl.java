@@ -35,10 +35,15 @@ public class VisitorServiceImpl implements VisitorService {
 				"BAD_REQUEST", null, null);
 		log.info("save visitor");
 		if (visitorDto != null) {
+			Visitor isPresent = visitorRepository.findByEmailIgnoreCase(visitorDto.getEmail());
+			if(isPresent == null) {
 			VisitorDTO visitor = visitorDao.addVisitor(visitorDto);
 			genericResponse.setStatusCode(HttpStatus.OK.value());
 			genericResponse.setMessage("Success");
 			genericResponse.setData(Collections.singletonList(visitor));
+			}else {
+				genericResponse.setMessage("visitor already registered with email :" + visitorDto.getEmail());
+			}
 		} else {
 			genericResponse.setMessage("Failed to the persist Visitor");
 		}
@@ -80,7 +85,6 @@ public class VisitorServiceImpl implements VisitorService {
 		GenericResponse<VisitorsCountDTO> genericResponse = new GenericResponse<>(ErrorCodes.BAD_REQUEST_STATUS_CODE,
 				"BAD_REQUEST", null, null);
 			VisitorsCountDTO listedVisitorsCount = visitorDao.listVisitorsCount();
-		
 			genericResponse.setStatusCode(HttpStatus.OK.value());
 			genericResponse.setMessage("Success");
 			genericResponse.setData(Collections.singletonList(listedVisitorsCount));
@@ -120,6 +124,23 @@ public class VisitorServiceImpl implements VisitorService {
 			} else {
 				genericResponse.setMessage("visitor is not found");
 			}
+		}
+		return genericResponse;
+	}
+
+	@Override
+	public GenericResponse<VisitorDTO> searchVisitor(String visitorType, String startDate, String endDate,
+			String visitorName, String contactPersonName, String isActive) {
+		GenericResponse<VisitorDTO> genericResponse = new GenericResponse<>(ErrorCodes.BAD_REQUEST_STATUS_CODE,
+				"BAD_REQUEST", null, null);
+		// TODO Auto-generated method stub
+		List<VisitorDTO> list = visitorDao.listVisitors("0", "1", "firstname", Sort.Direction.ASC);
+		if(list.isEmpty()) {
+			genericResponse.setMessage("Failed to fetch visitor");
+		}else {
+		genericResponse.setData(list);
+		genericResponse.setMessage("Success");
+		genericResponse.setStatusCode(HttpStatus.OK.value());
 		}
 		return genericResponse;
 	}

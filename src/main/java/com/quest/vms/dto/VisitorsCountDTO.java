@@ -1,6 +1,5 @@
 package com.quest.vms.dto;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 
@@ -15,7 +14,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @JsonInclude(value = Include.NON_NULL)
 public class VisitorsCountDTO {
-	
+
 	private Integer totalVisitorsVisitedTodayCount;
 	private Integer totalVisitorsApprovedTodayCount;
 	private Integer totalVisitorsNotApprovedTodayCount;

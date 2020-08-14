@@ -4,7 +4,6 @@ import java.util.List;
 
 import org.springframework.data.domain.Sort.Direction;
 
-import com.quest.vms.common.utils.GenericResponse;
 import com.quest.vms.dto.VisitorDTO;
 import com.quest.vms.dto.VisitorsCountDTO;
 import com.quest.vms.entity.Visitor;
@@ -21,8 +20,7 @@ public interface VisitorDAO {
 
 	public List<VisitorDTO> listVisitors(final String pageNo, final String pageSize, final String sortProperty,
 			Direction orderBy);
-	
+
 	public VisitorsCountDTO listVisitorsCount();
-	
 
 }

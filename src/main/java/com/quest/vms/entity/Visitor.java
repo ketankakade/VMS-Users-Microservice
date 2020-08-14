@@ -47,13 +47,13 @@ public class Visitor {
 	@Column(name = VISITOR_ID)
 	private Integer visitorId;
 
-	@Column(name = FIRST_NAME, columnDefinition = "text", nullable = false)
+	@Column(name = FIRST_NAME, nullable = false)
 	private String firstName;
 
-	@Column(name = LAST_NAME, columnDefinition = "text", nullable = false)
+	@Column(name = LAST_NAME, nullable = false)
 	private String lastName;
 
-	@Column(name = EMAIL, columnDefinition = "text", nullable = false, unique = true)
+	@Column(name = EMAIL, nullable = false, unique = true)
 	private String email;
 
 	@Column(name = CONTACT_NUMBER, length = 15, nullable = false)

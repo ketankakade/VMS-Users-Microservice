@@ -1,15 +1,11 @@
 package com.quest.vms.controller;
 
-import static com.quest.vms.common.utils.VmsConstants.VISITOR;
 import static com.quest.vms.common.utils.VmsConstants.ID;
+import static com.quest.vms.common.utils.VmsConstants.VISITOR;
 import static com.quest.vms.common.utils.VmsConstants.VISITOR_URL_PATH;
-
-import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -70,7 +66,7 @@ public class VisitorController {
 			@RequestParam(value = "size", defaultValue = "10", required = false) String size,
 			@RequestParam(value = "sortBy", defaultValue = "firstName", required = false) String sortBy,
 			@RequestParam(value = "orderBy", defaultValue = "ASC", required = false) Sort.Direction orderBy) {
-		log.info("list visitor"); 
+		log.info("list visitor");
 		GenericResponse<VisitorDTO> listVisitorGenericResponse = null;
 		try {
 			listVisitorGenericResponse = visitorService.listVisitors(index, size, sortBy, orderBy);
@@ -81,12 +77,10 @@ public class VisitorController {
 		}
 	}
 
-	
 	@ApiOperation(value = "Get visitors count to display on dashboard")
 	@GetMapping(VISITORCOUNT)
-	public GenericResponse<VisitorsCountDTO> getVisitorsCount()
-			{
-		log.info("list visitor count"); 
+	public GenericResponse<VisitorsCountDTO> getVisitorsCount() {
+		log.info("list visitor count");
 		GenericResponse<VisitorsCountDTO> visitorCountGenericResponse = null;
 		try {
 			visitorCountGenericResponse = visitorService.listVisitorsCount();
@@ -112,14 +106,38 @@ public class VisitorController {
 
 	@ApiOperation(value = "Update Visitor details")
 	@PutMapping(VISITOR)
-	public ResponseEntity<GenericResponse<VisitorDTO>> updateVisitor(@RequestBody VisitorDTO visitor) {
+	public GenericResponse<VisitorDTO> updateVisitor(@RequestBody VisitorDTO visitor) {
+		GenericResponse<VisitorDTO> updateVisitorGenericResponse = null;
 		try {
-			GenericResponse<VisitorDTO> updateVisitorGenericResponse = visitorService.updateVisitor(visitor);
-			return ResponseEntity.status(updateVisitorGenericResponse.getStatusCode())
-					.body(updateVisitorGenericResponse);
+			updateVisitorGenericResponse = visitorService.updateVisitor(visitor);
+			return updateVisitorGenericResponse;
 		} catch (Exception e) {
 			log.error(e.getMessage());
-			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+			return updateVisitorGenericResponse;
+		}
+	}
+
+	@ApiOperation(value = "Get All visitors by filter")
+	@GetMapping("listVisitor")
+	public GenericResponse<VisitorDTO> searchVisitor(
+			// approved or not
+			@RequestParam(value = "visitType", defaultValue = "ALL", required = false) String visitorType,
+			// if not specified, default is today's date
+			@RequestParam(value = "startDate", required = false) String startDate,
+			@RequestParam(value = "endDate", required = false) String endDate,
+			// visitor name
+			@RequestParam(value = "visitorName", required = false) String visitorName,
+			// get all visitor by contact person name
+			@RequestParam(value = "contactPersonName", required = false) String contactPersonName,
+			@RequestParam(value = "isActive", required = false) String isActive) {
+		GenericResponse<VisitorDTO> filerListVisitorGenericResponse = null;
+		try {
+			filerListVisitorGenericResponse = visitorService.searchVisitor(visitorType, startDate, endDate,
+					visitorName, contactPersonName, isActive);
+			return filerListVisitorGenericResponse;
+		} catch (Exception e) {
+			log.error(e.getMessage());
+			return filerListVisitorGenericResponse;
 		}
 	}
 
