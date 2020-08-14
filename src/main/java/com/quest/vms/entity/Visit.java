@@ -32,6 +32,9 @@ public class Visit {
 	public static final String VISIT_DATE = "visit_date";
 	public static final String CONTACT_PERSON = "contact_person";
 	public static final String TIME_SLOT = "time_slot";
+	public static final String APPROVALSTATUS = "approvalStatus";
+	public static final String ISVISITCOMPLETED = "isVisitCompleted";
+	
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -40,6 +43,12 @@ public class Visit {
 
 	@Column(name = VISIT_DATE)
 	private Date visitDate;
+	
+	@Column(name = APPROVALSTATUS)
+	private String approvalStatus;
+	
+	@Column(name = ISVISITCOMPLETED)
+	private Boolean isVisitCompleted;
 
 	@OneToOne(cascade = CascadeType.ALL)
 	private ContactPerson contactPerson;

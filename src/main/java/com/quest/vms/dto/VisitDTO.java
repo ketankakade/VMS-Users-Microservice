@@ -19,6 +19,8 @@ public class VisitDTO {
 	@JsonIgnore
 	private Integer visitId;
 	private Date visitDate;
+	private String approvalStatus;
+	private Boolean isVisitCompleted;
 	private ContactPersonDTO contactPerson;
 	private TimeSlotDTO timeSlot;
 	private List<DeviceDTO> devices;
