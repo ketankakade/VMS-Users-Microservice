@@ -118,10 +118,10 @@ public class VisitorController {
 	}
 
 	@ApiOperation(value = "Get All visitors by filter")
-	@GetMapping("listVisitor")
+	@GetMapping("/listVisitor")
 	public GenericResponse<VisitorDTO> searchVisitor(
 			// approved or not
-			@RequestParam(value = "visitType", defaultValue = "ALL", required = false) String visitorType,
+			@RequestParam(value = "visitorType", required = false) String visitorType,
 			// if not specified, default is today's date
 			@RequestParam(value = "startDate", required = false) String startDate,
 			@RequestParam(value = "endDate", required = false) String endDate,

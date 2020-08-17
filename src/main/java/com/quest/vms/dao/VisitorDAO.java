@@ -23,4 +23,7 @@ public interface VisitorDAO {
 
 	public VisitorsCountDTO listVisitorsCount();
 
+	public List<VisitorDTO> searchVisitor(String visitorType, String startDate, String endDate, String visitorName,
+			String contactPersonName, String isActive);
+
 }

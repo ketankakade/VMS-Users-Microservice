@@ -1,5 +1,8 @@
 package com.quest.vms.dao;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -15,6 +18,7 @@ import org.springframework.stereotype.Component;
 
 import com.quest.vms.dto.VisitorDTO;
 import com.quest.vms.dto.VisitorsCountDTO;
+import com.quest.vms.entity.Visit;
 import com.quest.vms.entity.Visitor;
 import com.quest.vms.repository.VisitorRepository;
 
@@ -72,7 +76,8 @@ public class VisitorDAOImpl implements VisitorDAO {
 	@Override
 	public List<VisitorDTO> listVisitors(String pageNo, String pageSize, String sortProperty, Sort.Direction orderBy) {
 		List<VisitorDTO> visitorDTOList = new ArrayList<>();
-		Pageable paging = PageRequest.of(Integer.parseInt(pageNo), Integer.parseInt(pageSize), Sort.by(orderBy, sortProperty));
+		Pageable paging = PageRequest.of(Integer.parseInt(pageNo), Integer.parseInt(pageSize),
+				Sort.by(orderBy, sortProperty));
 		Page<Visitor> pagedResult = visitorRepository.findAll(paging);
 		List<Visitor> listedVisitors = pagedResult.toList();
 		log.info("listedVisitors size " + listedVisitors.size());
@@ -82,15 +87,56 @@ public class VisitorDAOImpl implements VisitorDAO {
 		}
 		return visitorDTOList;
 	}
-	
+
 	@Override
 	public VisitorsCountDTO listVisitorsCount() {
-		 VisitorsCountDTO visitorCountDTO = new VisitorsCountDTO();	
-		 
-		 visitorCountDTO.setTotalVisitorsVisitedTodayCount(visitorRepository.findAll().size());
+		List<Visitor> approved = new ArrayList<Visitor>();
+		List<Visitor> pending = new ArrayList<Visitor>();
+		VisitorsCountDTO visitorCountDTO = new VisitorsCountDTO();
+		List<Visitor> visitorList = visitorRepository.findTodaysVisitor();
+		log.info("visitorList " + visitorList.size());
+		// find by todays date
+		visitorCountDTO.setTotalVisitorsVisitedTodayCount(visitorList.size());
+		for (Visitor visitor : visitorList) {
+			for(Visit v : visitor.getVisits()) {
+				log.info("type == " + visitor.getVisitorType());
+				if (v.getApprovalStatus().equalsIgnoreCase("approved")) {
+					approved.add(visitor);
+				} else {
+					pending.add(visitor);
+				}	
+			}
+			
+		}
+		// if visits.approved add in list and get the size
+		visitorCountDTO.setTotalVisitorsApprovedTodayCount(approved.size());
+		// if visits.notApproved add in list and get the size
+		visitorCountDTO.setTotalVisitorsNotApprovedTodayCount(pending.size());
 		return visitorCountDTO;
 	}
-	
+
+	@Override
+	public List<VisitorDTO> searchVisitor(String visitorType, String startDate, String endDate, String visitorName,
+			String contactPersonName, String isActive) {
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd"); 
+		LocalDate st = null;
+		LocalDate et = null;
+		if(!startDate.equals("")) {
+			 st = LocalDate.parse(startDate, formatter);
+			log.info("startDate " + st);
+		}
+		if(!endDate.equals("")) {
+			et = LocalDate.parse(endDate, formatter);
+			log.info("endDate " + et);
+		}
+		List<VisitorDTO> visitorDTOList = new ArrayList<>();
+		List<Visitor> listedVisitors = visitorRepository.findByFilter(visitorName, visitorType, contactPersonName, st, et);
+		for (Visitor visitor : listedVisitors) {
+			VisitorDTO visitorDTO = transformEntityToDto(visitor);
+			visitorDTOList.add(visitorDTO);
+		}
+		return visitorDTOList;
+	}
 
 	public Visitor transformDtoToEntity(VisitorDTO dto) {
 		modelMapper.getConfiguration().setMatchingStrategy(MatchingStrategies.LOOSE);

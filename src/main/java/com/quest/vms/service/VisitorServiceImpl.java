@@ -134,7 +134,7 @@ public class VisitorServiceImpl implements VisitorService {
 		GenericResponse<VisitorDTO> genericResponse = new GenericResponse<>(ErrorCodes.BAD_REQUEST_STATUS_CODE,
 				"BAD_REQUEST", null, null);
 		// TODO Auto-generated method stub
-		List<VisitorDTO> list = visitorDao.listVisitors("0", "1", "firstname", Sort.Direction.ASC);
+		List<VisitorDTO> list = visitorDao.searchVisitor(visitorType, startDate, endDate, visitorName, contactPersonName, isActive);
 		if(list.isEmpty()) {
 			genericResponse.setMessage("Failed to fetch visitor");
 		}else {

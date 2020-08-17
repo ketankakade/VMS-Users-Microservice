@@ -14,6 +14,8 @@ import javax.persistence.JoinTable;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -34,7 +36,7 @@ public class Visit {
 	public static final String TIME_SLOT = "time_slot";
 	public static final String APPROVALSTATUS = "approvalStatus";
 	public static final String ISVISITCOMPLETED = "isVisitCompleted";
-	
+
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -42,6 +44,7 @@ public class Visit {
 	private Integer visitId;
 
 	@Column(name = VISIT_DATE)
+	@Temporal(TemporalType.TIMESTAMP)
 	private Date visitDate;
 	
 	@Column(name = APPROVALSTATUS)
