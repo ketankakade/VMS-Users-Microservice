@@ -24,7 +24,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class OTP {
 
-	public static final String ID = "Id";
+	public static final String ID = "id";
 	public static final String OTP_NUMBER = "otpNumber";
 	public static final String EMAIL = "email";
 	public static final String TIMESTAMP = "timestamp";
@@ -41,6 +41,6 @@ public class OTP {
 	private String email;
 	
 	@CreationTimestamp
-    @Column(name = "timestamp")
+    @Column(name = TIMESTAMP)
 	private Timestamp timestamp;
 }
