@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import com.quest.vms.common.utils.ErrorCodes;
 import com.quest.vms.common.utils.GenericResponse;
 import com.quest.vms.dao.VisitorDAO;
+import com.quest.vms.dto.OtpDTO;
 import com.quest.vms.dto.VisitorDTO;
 import com.quest.vms.dto.VisitorsCountDTO;
 import com.quest.vms.entity.Visitor;
@@ -144,5 +145,23 @@ public class VisitorServiceImpl implements VisitorService {
 		}
 		return genericResponse;
 	}
+	
+	
+	@Override
+	public GenericResponse<OtpDTO> generateOtp(final OtpDTO otpDto) {
+		GenericResponse<OtpDTO> genericResponse = new GenericResponse<>(ErrorCodes.BAD_REQUEST_STATUS_CODE,
+				"BAD_REQUEST", null, null);
+		log.info("generate otp");
+		if (otpDto != null) {
+			
+			OtpDTO otpDTO = visitorDao.generateOtp(otpDto);
+			genericResponse.setStatusCode(HttpStatus.OK.value());
+			genericResponse.setMessage("Success");
+			genericResponse.setData(Collections.singletonList(otpDTO));
+			
+		}
+		return genericResponse;
+	}
+
 
 }

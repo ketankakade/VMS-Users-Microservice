@@ -7,6 +7,7 @@ public class VmsConstants {
   // endpoints
   public static final String VISITOR_URL_PATH = "visitor";
   public static final String VISITOR = "/visitor";
+  public static final String VISITOR_OTP = "/visitor-otp";
   public static final String VISITORCOUNT = "/visitorcount";
   public static final String ID = "id";
   

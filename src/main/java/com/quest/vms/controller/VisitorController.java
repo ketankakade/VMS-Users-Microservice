@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.quest.vms.common.utils.GenericResponse;
+import com.quest.vms.dto.OtpDTO;
 import com.quest.vms.dto.VisitorDTO;
 import com.quest.vms.dto.VisitorsCountDTO;
 import com.quest.vms.service.VisitorService;
@@ -32,6 +33,7 @@ import lombok.extern.slf4j.Slf4j;
 public class VisitorController {
 
 	private static final String VISITORCOUNT = "/visitorcount";
+	private static final String VISITOR_OTP = "/visitor-otp";
 	@Autowired
 	private VisitorService visitorService;
 
@@ -140,5 +142,18 @@ public class VisitorController {
 			return filerListVisitorGenericResponse;
 		}
 	}
+	
+	@ApiOperation(value = "Call Email Service to Generate OTP")
+	@PostMapping(VISITOR_OTP)
+	public GenericResponse<OtpDTO> generateOTP(@RequestBody OtpDTO otpDto) {
+		GenericResponse<OtpDTO> generateOtpGenericResponse = null;
+		try {
+			generateOtpGenericResponse = visitorService.generateOtp(otpDto);
+			return generateOtpGenericResponse;
+		} catch (Exception e) {
+			return generateOtpGenericResponse;
+		}
+	}
+
 
 }

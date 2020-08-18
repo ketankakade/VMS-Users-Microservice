@@ -1,7 +1,6 @@
 package com.quest.vms.dao;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
@@ -16,10 +15,13 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Component;
 
+import com.quest.vms.dto.OtpDTO;
 import com.quest.vms.dto.VisitorDTO;
 import com.quest.vms.dto.VisitorsCountDTO;
+import com.quest.vms.entity.OTP;
 import com.quest.vms.entity.Visit;
 import com.quest.vms.entity.Visitor;
+import com.quest.vms.repository.OtpRepository;
 import com.quest.vms.repository.VisitorRepository;
 
 import lombok.extern.slf4j.Slf4j;
@@ -30,6 +32,9 @@ public class VisitorDAOImpl implements VisitorDAO {
 
 	@Autowired
 	private VisitorRepository visitorRepository;
+
+	@Autowired
+	private OtpRepository otpRepository;
 
 	private ModelMapper modelMapper = new ModelMapper();
 
@@ -98,15 +103,15 @@ public class VisitorDAOImpl implements VisitorDAO {
 		// find by todays date
 		visitorCountDTO.setTotalVisitorsVisitedTodayCount(visitorList.size());
 		for (Visitor visitor : visitorList) {
-			for(Visit v : visitor.getVisits()) {
+			for (Visit v : visitor.getVisits()) {
 				log.info("type == " + visitor.getVisitorType());
 				if (v.getApprovalStatus().equalsIgnoreCase("approved")) {
 					approved.add(visitor);
 				} else {
 					pending.add(visitor);
-				}	
+				}
 			}
-			
+
 		}
 		// if visits.approved add in list and get the size
 		visitorCountDTO.setTotalVisitorsApprovedTodayCount(approved.size());
@@ -118,24 +123,33 @@ public class VisitorDAOImpl implements VisitorDAO {
 	@Override
 	public List<VisitorDTO> searchVisitor(String visitorType, String startDate, String endDate, String visitorName,
 			String contactPersonName, String isActive) {
-		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd"); 
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 		LocalDate st = null;
 		LocalDate et = null;
-		if(!startDate.equals("")) {
-			 st = LocalDate.parse(startDate, formatter);
+		if (!startDate.equals("")) {
+			st = LocalDate.parse(startDate, formatter);
 			log.info("startDate " + st);
 		}
-		if(!endDate.equals("")) {
+		if (!endDate.equals("")) {
 			et = LocalDate.parse(endDate, formatter);
 			log.info("endDate " + et);
 		}
 		List<VisitorDTO> visitorDTOList = new ArrayList<>();
-		List<Visitor> listedVisitors = visitorRepository.findByFilter(visitorName, visitorType, contactPersonName, st, et);
+		List<Visitor> listedVisitors = visitorRepository.findByFilter(visitorName, visitorType, contactPersonName, st,
+				et);
 		for (Visitor visitor : listedVisitors) {
 			VisitorDTO visitorDTO = transformEntityToDto(visitor);
 			visitorDTOList.add(visitorDTO);
 		}
 		return visitorDTOList;
+	}
+
+	@Override
+	public OtpDTO generateOtp(final OtpDTO OtpDto) {
+		log.info("Save otp details::Visitor: {}", OtpDto);
+		OTP otp = transformDtoToEntity(OtpDto);
+		otp = otpRepository.save(otp);
+		return transformEntityToDto(otp);
 	}
 
 	public Visitor transformDtoToEntity(VisitorDTO dto) {
@@ -146,6 +160,16 @@ public class VisitorDAOImpl implements VisitorDAO {
 	public VisitorDTO transformEntityToDto(Visitor entity) {
 		modelMapper.getConfiguration().setMatchingStrategy(MatchingStrategies.LOOSE);
 		return modelMapper.map(entity, VisitorDTO.class);
+	}
+
+	public OTP transformDtoToEntity(OtpDTO dto) {
+		// modelMapper.getConfiguration().setMatchingStrategy(MatchingStrategies.LOOSE);
+		return modelMapper.map(dto, OTP.class);
+	}
+
+	public OtpDTO transformEntityToDto(OTP entity) {
+		// modelMapper.getConfiguration().setMatchingStrategy(MatchingStrategies.LOOSE);
+		return modelMapper.map(entity, OtpDTO.class);
 	}
 
 }
