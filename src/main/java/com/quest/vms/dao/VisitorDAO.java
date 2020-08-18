@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.data.domain.Sort.Direction;
 
 import com.quest.vms.dto.OtpDTO;
+import com.quest.vms.dto.ValidateOtpDTO;
 import com.quest.vms.dto.VisitorDTO;
 import com.quest.vms.dto.VisitorsCountDTO;
 import com.quest.vms.entity.Visitor;
@@ -28,5 +29,7 @@ public interface VisitorDAO {
 			String contactPersonName, String isActive);
 	
 	public OtpDTO generateOtp(final OtpDTO OtpDto);
+	
+    public Boolean validateOtp(ValidateOtpDTO validateOtpDTO);
 
 }

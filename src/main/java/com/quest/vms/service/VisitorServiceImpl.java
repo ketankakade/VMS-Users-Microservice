@@ -13,6 +13,7 @@ import com.quest.vms.common.utils.ErrorCodes;
 import com.quest.vms.common.utils.GenericResponse;
 import com.quest.vms.dao.VisitorDAO;
 import com.quest.vms.dto.OtpDTO;
+import com.quest.vms.dto.ValidateOtpDTO;
 import com.quest.vms.dto.VisitorDTO;
 import com.quest.vms.dto.VisitorsCountDTO;
 import com.quest.vms.entity.Visitor;
@@ -160,6 +161,22 @@ public class VisitorServiceImpl implements VisitorService {
 			genericResponse.setData(Collections.singletonList(otpDTO));
 			
 		}
+		return genericResponse;
+	}
+	
+	
+	    @Override
+	    public GenericResponse<Boolean> validateOtp(ValidateOtpDTO validateOtpDTO) {
+		GenericResponse<Boolean> genericResponse = new GenericResponse<>(ErrorCodes.BAD_REQUEST_STATUS_CODE,
+				"BAD_REQUEST", null, null);
+		Boolean isOtpValid = visitorDao.validateOtp(validateOtpDTO);
+		if (isOtpValid != null) {
+			genericResponse.setStatusCode(HttpStatus.OK.value());
+			genericResponse.setMessage("Success");
+			genericResponse.setData(Collections.singletonList(isOtpValid));
+		} else {
+			genericResponse.setMessage("OTP is not valid");
+		}   
 		return genericResponse;
 	}
 

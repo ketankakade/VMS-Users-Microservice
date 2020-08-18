@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.quest.vms.common.utils.GenericResponse;
 import com.quest.vms.dto.OtpDTO;
+import com.quest.vms.dto.ValidateOtpDTO;
 import com.quest.vms.dto.VisitorDTO;
 import com.quest.vms.dto.VisitorsCountDTO;
 import com.quest.vms.service.VisitorService;
@@ -34,6 +35,8 @@ public class VisitorController {
 
 	private static final String VISITORCOUNT = "/visitorcount";
 	private static final String VISITOR_OTP = "/visitor-otp";
+	private static final String OTPNUMBER = "otpNumber";
+	private static final String VALIDATE_OTP = "/validate-otp";
 	@Autowired
 	private VisitorService visitorService;
 
@@ -153,7 +156,21 @@ public class VisitorController {
 		} catch (Exception e) {
 			return generateOtpGenericResponse;
 		}
+	}	
+	
+	
+	@ApiOperation(value = "Validate OTP")
+	@PostMapping(VALIDATE_OTP)
+	public GenericResponse<Boolean> validateOtp(@RequestBody ValidateOtpDTO validateOtpDTO) {
+		GenericResponse<Boolean> validateOtpGenericResponse = null;
+		try {
+			validateOtpGenericResponse = visitorService.validateOtp(validateOtpDTO);
+			return validateOtpGenericResponse;
+		} catch (Exception e) {
+			return validateOtpGenericResponse;
+		}
 	}
+
 
 
 }

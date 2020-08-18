@@ -16,6 +16,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Component;
 
 import com.quest.vms.dto.OtpDTO;
+import com.quest.vms.dto.ValidateOtpDTO;
 import com.quest.vms.dto.VisitorDTO;
 import com.quest.vms.dto.VisitorsCountDTO;
 import com.quest.vms.entity.OTP;
@@ -152,6 +153,30 @@ public class VisitorDAOImpl implements VisitorDAO {
 		return transformEntityToDto(otp);
 	}
 
+	@Override
+	public Boolean validateOtp(ValidateOtpDTO validateOtpDTO) 
+	{
+		Integer otpTobeValidated = validateOtpDTO.getOTPNumber();
+		if(otpTobeValidated >= 0)
+		{
+			OTP otp = otpRepository.findByEmailIgnoreCase(validateOtpDTO.getEmail());
+			Integer otpFromDb = otp.getOtpNumber();
+			if(otpFromDb > 0)
+			{
+				if(otpTobeValidated == otpFromDb)
+				{					
+					return true;
+				}				
+				else
+				{
+					return false;
+				}					
+			}
+				return false;
+		}
+		return false;
+	}
+
 	public Visitor transformDtoToEntity(VisitorDTO dto) {
 		modelMapper.getConfiguration().setMatchingStrategy(MatchingStrategies.LOOSE);
 		return modelMapper.map(dto, Visitor.class);
@@ -163,12 +188,10 @@ public class VisitorDAOImpl implements VisitorDAO {
 	}
 
 	public OTP transformDtoToEntity(OtpDTO dto) {
-		// modelMapper.getConfiguration().setMatchingStrategy(MatchingStrategies.LOOSE);
 		return modelMapper.map(dto, OTP.class);
 	}
 
 	public OtpDTO transformEntityToDto(OTP entity) {
-		// modelMapper.getConfiguration().setMatchingStrategy(MatchingStrategies.LOOSE);
 		return modelMapper.map(entity, OtpDTO.class);
 	}
 
