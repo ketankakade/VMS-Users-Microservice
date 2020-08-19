@@ -8,6 +8,7 @@ import com.quest.vms.dto.OtpDTO;
 import com.quest.vms.dto.ValidateOtpDTO;
 import com.quest.vms.dto.VisitorDTO;
 import com.quest.vms.dto.VisitorsCountDTO;
+import com.quest.vms.entity.OTP;
 import com.quest.vms.entity.Visitor;
 
 public interface VisitorDAO {
@@ -30,6 +31,6 @@ public interface VisitorDAO {
 	
 	public OtpDTO generateOtp(final OtpDTO OtpDto);
 	
-    public Boolean validateOtp(ValidateOtpDTO validateOtpDTO);
+    public OTP validateOtp(ValidateOtpDTO validateOtpDTO);
 
 }

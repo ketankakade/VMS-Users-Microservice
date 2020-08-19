@@ -154,28 +154,9 @@ public class VisitorDAOImpl implements VisitorDAO {
 	}
 
 	@Override
-	public Boolean validateOtp(ValidateOtpDTO validateOtpDTO) 
-	{
-		Integer otpTobeValidated = validateOtpDTO.getOTPNumber();
-		if(otpTobeValidated >= 0)
-		{
-			OTP otp = otpRepository.findByEmailIgnoreCase(validateOtpDTO.getEmail());
-			Integer otpFromDb = otp.getOtpNumber();
-			if(otpFromDb > 0)
-			{
-				if(otpTobeValidated == otpFromDb)
-				{					
-					return true;
-				}				
-				else
-				{
-					return false;
-				}					
-			}
-				return false;
-		}
-		return false;
-	}
+	public OTP validateOtp(ValidateOtpDTO validateOtpDTO) {
+	return otpRepository.findByEmailIgnoreCase(validateOtpDTO.getEmail());
+}
 
 	public Visitor transformDtoToEntity(VisitorDTO dto) {
 		modelMapper.getConfiguration().setMatchingStrategy(MatchingStrategies.LOOSE);

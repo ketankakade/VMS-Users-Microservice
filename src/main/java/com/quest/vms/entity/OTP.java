@@ -35,7 +35,7 @@ public class OTP {
 	private Integer id;
 
 	@Column(name = OTP_NUMBER, nullable = false)
-	private Integer otpNumber;
+	private String otpNumber;
 	
 	@Column(name = EMAIL, nullable = false)
 	private String email;

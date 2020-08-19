@@ -14,7 +14,7 @@ import lombok.NoArgsConstructor;
 @JsonInclude(value = Include.NON_NULL)
 public class ValidateOtpDTO {
 
-	private Integer OTPNumber;
+	private String otpNumber;
 	
 	private String email;	
 	

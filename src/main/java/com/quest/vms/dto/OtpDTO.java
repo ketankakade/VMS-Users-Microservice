@@ -26,7 +26,7 @@ import lombok.NoArgsConstructor;
 public class OtpDTO {
 
 	private Integer Id;
-	private Integer OTPNumber;
+	private String otpNumber;
 	
 	private String email;	
 	

@@ -16,6 +16,7 @@ import com.quest.vms.dto.OtpDTO;
 import com.quest.vms.dto.ValidateOtpDTO;
 import com.quest.vms.dto.VisitorDTO;
 import com.quest.vms.dto.VisitorsCountDTO;
+import com.quest.vms.entity.OTP;
 import com.quest.vms.entity.Visitor;
 import com.quest.vms.repository.VisitorRepository;
 
@@ -38,12 +39,12 @@ public class VisitorServiceImpl implements VisitorService {
 		log.info("save visitor");
 		if (visitorDto != null) {
 			Visitor isPresent = visitorRepository.findByEmailIgnoreCase(visitorDto.getEmail());
-			if(isPresent == null) {
-			VisitorDTO visitor = visitorDao.addVisitor(visitorDto);
-			genericResponse.setStatusCode(HttpStatus.OK.value());
-			genericResponse.setMessage("Success");
-			genericResponse.setData(Collections.singletonList(visitor));
-			}else {
+			if (isPresent == null) {
+				VisitorDTO visitor = visitorDao.addVisitor(visitorDto);
+				genericResponse.setStatusCode(HttpStatus.OK.value());
+				genericResponse.setMessage("Success");
+				genericResponse.setData(Collections.singletonList(visitor));
+			} else {
 				genericResponse.setMessage("visitor already registered with email :" + visitorDto.getEmail());
 			}
 		} else {
@@ -68,7 +69,8 @@ public class VisitorServiceImpl implements VisitorService {
 	}
 
 	@Override
-	public GenericResponse<VisitorDTO> listVisitors(final String pageNo, final String pageSize, final String sortProperty, Sort.Direction orderBy) {
+	public GenericResponse<VisitorDTO> listVisitors(final String pageNo, final String pageSize,
+			final String sortProperty, Sort.Direction orderBy) {
 		GenericResponse<VisitorDTO> genericResponse = new GenericResponse<>(ErrorCodes.BAD_REQUEST_STATUS_CODE,
 				"BAD_REQUEST", null, null);
 		List<VisitorDTO> listedVisitors = visitorDao.listVisitors(pageNo, pageSize, sortProperty, orderBy);
@@ -81,16 +83,16 @@ public class VisitorServiceImpl implements VisitorService {
 		}
 		return genericResponse;
 	}
-	
+
 	@Override
-	public GenericResponse<VisitorsCountDTO> listVisitorsCount() 	{
+	public GenericResponse<VisitorsCountDTO> listVisitorsCount() {
 		GenericResponse<VisitorsCountDTO> genericResponse = new GenericResponse<>(ErrorCodes.BAD_REQUEST_STATUS_CODE,
 				"BAD_REQUEST", null, null);
-			VisitorsCountDTO listedVisitorsCount = visitorDao.listVisitorsCount();
-			genericResponse.setStatusCode(HttpStatus.OK.value());
-			genericResponse.setMessage("Success");
-			genericResponse.setData(Collections.singletonList(listedVisitorsCount));
-		
+		VisitorsCountDTO listedVisitorsCount = visitorDao.listVisitorsCount();
+		genericResponse.setStatusCode(HttpStatus.OK.value());
+		genericResponse.setMessage("Success");
+		genericResponse.setData(Collections.singletonList(listedVisitorsCount));
+
 		return genericResponse;
 	}
 
@@ -136,49 +138,58 @@ public class VisitorServiceImpl implements VisitorService {
 		GenericResponse<VisitorDTO> genericResponse = new GenericResponse<>(ErrorCodes.BAD_REQUEST_STATUS_CODE,
 				"BAD_REQUEST", null, null);
 		// TODO Auto-generated method stub
-		List<VisitorDTO> list = visitorDao.searchVisitor(visitorType, startDate, endDate, visitorName, contactPersonName, isActive);
-		if(list.isEmpty()) {
+		List<VisitorDTO> list = visitorDao.searchVisitor(visitorType, startDate, endDate, visitorName,
+				contactPersonName, isActive);
+		if (list.isEmpty()) {
 			genericResponse.setMessage("Failed to fetch visitor");
-		}else {
-		genericResponse.setData(list);
-		genericResponse.setMessage("Success");
-		genericResponse.setStatusCode(HttpStatus.OK.value());
+		} else {
+			genericResponse.setData(list);
+			genericResponse.setMessage("Success");
+			genericResponse.setStatusCode(HttpStatus.OK.value());
 		}
 		return genericResponse;
 	}
-	
-	
+
 	@Override
 	public GenericResponse<OtpDTO> generateOtp(final OtpDTO otpDto) {
 		GenericResponse<OtpDTO> genericResponse = new GenericResponse<>(ErrorCodes.BAD_REQUEST_STATUS_CODE,
 				"BAD_REQUEST", null, null);
 		log.info("generate otp");
 		if (otpDto != null) {
-			
+
 			OtpDTO otpDTO = visitorDao.generateOtp(otpDto);
 			genericResponse.setStatusCode(HttpStatus.OK.value());
 			genericResponse.setMessage("Success");
 			genericResponse.setData(Collections.singletonList(otpDTO));
-			
+
 		}
 		return genericResponse;
 	}
-	
-	
-	    @Override
-	    public GenericResponse<Boolean> validateOtp(ValidateOtpDTO validateOtpDTO) {
+
+	@Override
+	public GenericResponse<Boolean> validateOtp(ValidateOtpDTO validateOtpDTO) {
 		GenericResponse<Boolean> genericResponse = new GenericResponse<>(ErrorCodes.BAD_REQUEST_STATUS_CODE,
 				"BAD_REQUEST", null, null);
-		Boolean isOtpValid = visitorDao.validateOtp(validateOtpDTO);
-		if (isOtpValid != null) {
-			genericResponse.setStatusCode(HttpStatus.OK.value());
-			genericResponse.setMessage("Success");
-			genericResponse.setData(Collections.singletonList(isOtpValid));
+		log.info("verify otp email " + validateOtpDTO.getEmail());
+		log.info("verify otp number " + validateOtpDTO.getOtpNumber());
+		OTP otpObject = visitorDao.validateOtp(validateOtpDTO);
+		if (otpObject != null) {
+			if (validateOtpDTO.getOtpNumber().equals(otpObject.getOtpNumber())) {
+				long expiryTimeDb = otpObject.getTimestamp().getTime();
+				if (System.currentTimeMillis() - expiryTimeDb < 300000) {
+					genericResponse.setStatusCode(HttpStatus.OK.value());
+					genericResponse.setMessage("Success");
+					genericResponse.setData(Collections.singletonList(true));
+				} else {
+					genericResponse.setMessage("Otp is expired");
+				}
+			} else {
+				genericResponse.setMessage("OTP is not valid");
+			}
 		} else {
-			genericResponse.setMessage("OTP is not valid");
-		}   
+			genericResponse.setMessage("OTP not found");
+		}
 		return genericResponse;
 	}
-
 
 }
