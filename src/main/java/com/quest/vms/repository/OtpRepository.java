@@ -8,4 +8,6 @@ public interface OtpRepository extends JpaRepository<OTP, Integer> {
 	
 	public OTP findByEmailIgnoreCase(String email);
 
+	OTP findFirstByOrderByTimestampDesc();
+	
 }

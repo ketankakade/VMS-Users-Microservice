@@ -136,8 +136,7 @@ public class VisitorDAOImpl implements VisitorDAO {
 			log.info("endDate " + et);
 		}
 		List<VisitorDTO> visitorDTOList = new ArrayList<>();
-		List<Visitor> listedVisitors = visitorRepository.findByFilter(visitorName, visitorType, contactPersonName, st,
-				et);
+		List<Visitor> listedVisitors = visitorRepository.findByFilter(visitorName, visitorType, contactPersonName);
 		for (Visitor visitor : listedVisitors) {
 			VisitorDTO visitorDTO = transformEntityToDto(visitor);
 			visitorDTOList.add(visitorDTO);
@@ -155,7 +154,7 @@ public class VisitorDAOImpl implements VisitorDAO {
 
 	@Override
 	public OTP validateOtp(ValidateOtpDTO validateOtpDTO) {
-	return otpRepository.findByEmailIgnoreCase(validateOtpDTO.getEmail());
+		return otpRepository.findFirstByOrderByTimestampDesc();
 }
 
 	public Visitor transformDtoToEntity(VisitorDTO dto) {
