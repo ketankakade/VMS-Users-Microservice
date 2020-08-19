@@ -137,15 +137,15 @@ public class VisitorController {
 			@RequestParam(value = "isActive", required = false) String isActive) {
 		GenericResponse<VisitorDTO> filerListVisitorGenericResponse = null;
 		try {
-			filerListVisitorGenericResponse = visitorService.searchVisitor(visitorType, startDate, endDate,
-					visitorName, contactPersonName, isActive);
+			filerListVisitorGenericResponse = visitorService.searchVisitor(visitorType, startDate, endDate, visitorName,
+					contactPersonName, isActive);
 			return filerListVisitorGenericResponse;
 		} catch (Exception e) {
 			log.error(e.getMessage());
 			return filerListVisitorGenericResponse;
 		}
 	}
-	
+
 	@ApiOperation(value = "Call Email Service to Generate OTP")
 	@PostMapping(VISITOR_OTP)
 	public GenericResponse<OtpDTO> generateOTP(@RequestBody OtpDTO otpDto) {
@@ -156,9 +156,8 @@ public class VisitorController {
 		} catch (Exception e) {
 			return generateOtpGenericResponse;
 		}
-	}	
-	
-	
+	}
+
 	@ApiOperation(value = "Validate OTP")
 	@PostMapping(VALIDATE_OTP)
 	public GenericResponse<Boolean> validateOtp(@RequestBody ValidateOtpDTO validateOtpDTO) {
@@ -170,7 +169,4 @@ public class VisitorController {
 			return validateOtpGenericResponse;
 		}
 	}
-
-
-
 }
