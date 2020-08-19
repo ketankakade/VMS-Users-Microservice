@@ -154,7 +154,7 @@ public class VisitorDAOImpl implements VisitorDAO {
 
 	@Override
 	public OTP validateOtp(ValidateOtpDTO validateOtpDTO) {
-		return otpRepository.findFirstByOrderByTimestampDesc();
+		return otpRepository.findFirstByEmailOrderByTimestampDesc(validateOtpDTO.getEmail());
 }
 
 	public Visitor transformDtoToEntity(VisitorDTO dto) {
