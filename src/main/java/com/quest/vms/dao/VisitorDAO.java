@@ -29,6 +29,8 @@ public interface VisitorDAO {
 	public List<VisitorDTO> searchVisitor(String visitorType, String startDate, String endDate, String visitorName,
 			String contactPersonName, String isActive);
 	
+	public List<VisitorDTO> listVisitorByApprovalStatus(String approvalStatus);
+	
 	public OtpDTO generateOtp(final OtpDTO OtpDto);
 	
     public OTP validateOtp(ValidateOtpDTO validateOtpDTO);

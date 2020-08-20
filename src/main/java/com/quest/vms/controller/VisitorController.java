@@ -35,7 +35,6 @@ public class VisitorController {
 
 	private static final String VISITORCOUNT = "/visitorcount";
 	private static final String VISITOR_OTP = "/visitor-otp";
-	private static final String OTPNUMBER = "otpNumber";
 	private static final String VALIDATE_OTP = "/validate-otp";
 	@Autowired
 	private VisitorService visitorService;
@@ -52,7 +51,7 @@ public class VisitorController {
 		}
 	}
 
-	@ApiOperation(value = "Get User by Id")
+	@ApiOperation(value = "Get Visitor by Id")
 	@GetMapping(VISITOR + "/{" + ID + "}")
 	public GenericResponse<VisitorDTO> getVisitorById(@PathVariable(value = ID) Integer id) {
 		GenericResponse<VisitorDTO> getVisitorGenericResponse = null;
@@ -145,6 +144,22 @@ public class VisitorController {
 			return filerListVisitorGenericResponse;
 		}
 	}
+	
+	@ApiOperation(value = "Get All visitors by approval status")
+	@GetMapping("/listVisitorByApprovalStatus")
+	public GenericResponse<VisitorDTO> listVisitorByApprovalStatus(
+			
+			@RequestParam(value = "approvalStatus") String approvalStatus){
+		GenericResponse<VisitorDTO> listVisitorByApporvalStatusGenericResponse = null;
+		try {
+			listVisitorByApporvalStatusGenericResponse = visitorService.listVisitorByApprovalStatus(approvalStatus);
+			return listVisitorByApporvalStatusGenericResponse;
+		} catch (Exception e) {
+			log.error(e.getMessage());
+			return listVisitorByApporvalStatusGenericResponse;
+		}
+	}
+
 
 	@ApiOperation(value = "Call Email Service to Generate OTP")
 	@PostMapping(VISITOR_OTP)

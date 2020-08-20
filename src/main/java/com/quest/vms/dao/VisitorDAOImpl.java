@@ -136,8 +136,29 @@ public class VisitorDAOImpl implements VisitorDAO {
 			log.info("endDate " + et);
 		}
 		List<VisitorDTO> visitorDTOList = new ArrayList<>();
-		List<Visitor> listedVisitors = visitorRepository.findByFilter(visitorName, visitorType, contactPersonName, st, et);
+		List<Visitor> listedVisitors = visitorRepository.findByFilter(visitorName, visitorType, contactPersonName, st,
+				et);
 		for (Visitor visitor : listedVisitors) {
+			VisitorDTO visitorDTO = transformEntityToDto(visitor);
+			visitorDTOList.add(visitorDTO);
+		}
+		return visitorDTOList;
+	}
+
+	@Override
+	public List<VisitorDTO> listVisitorByApprovalStatus(String approvalStatus) {
+		List<VisitorDTO> visitorDTOList = new ArrayList<>();
+		List<Visitor> visitorListResult = new ArrayList<>();
+		List<Visitor> visitorList = visitorRepository.findAll();
+		for (Visitor visitor : visitorList) {
+			for (Visit v : visitor.getVisits()) {
+				log.info("type == " + visitor.getVisitorType());
+				if (v.getApprovalStatus().equalsIgnoreCase(approvalStatus)) {
+					visitorListResult.add(visitor);
+				}
+			}
+		}
+		for (Visitor visitor : visitorListResult) {
 			VisitorDTO visitorDTO = transformEntityToDto(visitor);
 			visitorDTOList.add(visitorDTO);
 		}
@@ -155,7 +176,7 @@ public class VisitorDAOImpl implements VisitorDAO {
 	@Override
 	public OTP validateOtp(ValidateOtpDTO validateOtpDTO) {
 		return otpRepository.findFirstByEmailOrderByTimestampDesc(validateOtpDTO.getEmail());
-}
+	}
 
 	public Visitor transformDtoToEntity(VisitorDTO dto) {
 		modelMapper.getConfiguration().setMatchingStrategy(MatchingStrategies.LOOSE);

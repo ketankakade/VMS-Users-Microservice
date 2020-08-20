@@ -38,15 +38,15 @@ public class VisitorServiceImpl implements VisitorService {
 				"BAD_REQUEST", null, null);
 		log.info("save visitor");
 		if (visitorDto != null) {
-			Visitor isPresent = visitorRepository.findByEmailIgnoreCase(visitorDto.getEmail());
-			if (isPresent == null) {
+        //Visitor isPresent = visitorRepository.findByEmailIgnoreCase(visitorDto.getEmail());
+			//if (isPresent == null) {
 				VisitorDTO visitor = visitorDao.addVisitor(visitorDto);
 				genericResponse.setStatusCode(HttpStatus.OK.value());
 				genericResponse.setMessage("Success");
 				genericResponse.setData(Collections.singletonList(visitor));
-			} else {
-				genericResponse.setMessage("visitor already registered with email :" + visitorDto.getEmail());
-			}
+			//} else {
+				//genericResponse.setMessage("visitor already registered with email :" + visitorDto.getEmail());
+			//}
 		} else {
 			genericResponse.setMessage("Failed to the persist Visitor");
 		}
@@ -140,6 +140,22 @@ public class VisitorServiceImpl implements VisitorService {
 		// TODO Auto-generated method stub
 		List<VisitorDTO> list = visitorDao.searchVisitor(visitorType, startDate, endDate, visitorName,
 				contactPersonName, isActive);
+		if (list.isEmpty()) {
+			genericResponse.setMessage("Failed to fetch visitor");
+		} else {
+			genericResponse.setData(list);
+			genericResponse.setMessage("Success");
+			genericResponse.setStatusCode(HttpStatus.OK.value());
+		}
+		return genericResponse;
+	}
+	
+	@Override
+	public GenericResponse<VisitorDTO> listVisitorByApprovalStatus(String approvalStatus){
+		GenericResponse<VisitorDTO> genericResponse = new GenericResponse<>(ErrorCodes.BAD_REQUEST_STATUS_CODE,
+				"BAD_REQUEST", null, null);
+		// 
+		List<VisitorDTO> list = visitorDao.listVisitorByApprovalStatus(approvalStatus);
 		if (list.isEmpty()) {
 			genericResponse.setMessage("Failed to fetch visitor");
 		} else {

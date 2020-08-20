@@ -21,6 +21,9 @@ public class VisitDTO {
 	private Date visitDate;
 	private String approvalStatus;
 	private Boolean isVisitCompleted;
+	private String placeOfVisit;
+	private String reasonForVisit;
+	
 	private ContactPersonDTO contactPerson;
 	private TimeSlotDTO timeSlot;
 	private List<DeviceDTO> devices;

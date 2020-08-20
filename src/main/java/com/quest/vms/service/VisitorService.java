@@ -7,6 +7,7 @@ import com.quest.vms.dto.OtpDTO;
 import com.quest.vms.dto.ValidateOtpDTO;
 import com.quest.vms.dto.VisitorDTO;
 import com.quest.vms.dto.VisitorsCountDTO;
+import com.quest.vms.entity.Visitor;
 
 public interface VisitorService {
 
@@ -24,6 +25,8 @@ public interface VisitorService {
 
 	public GenericResponse<VisitorDTO> searchVisitor(String visitorType, String startDate, String endDate,
 			String visitorName, String contactPersonName, String isActive);
+	
+	public GenericResponse<VisitorDTO> listVisitorByApprovalStatus(String approvalStatus);	
 	
 	public GenericResponse<OtpDTO> generateOtp(final OtpDTO otpDto);
 	

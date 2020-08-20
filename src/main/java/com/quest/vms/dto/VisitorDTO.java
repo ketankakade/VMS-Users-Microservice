@@ -23,8 +23,6 @@ public class VisitorDTO {
 	private String firstName;
 	private String lastName;
 	private String idProof;
-	private String placeOfVisit;
-	private String reasonForVisit;
 	private String visitorType;
 	private List<VisitDTO> visits;
 

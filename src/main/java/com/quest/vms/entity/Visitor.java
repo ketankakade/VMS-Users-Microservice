@@ -35,8 +35,6 @@ public class Visitor {
 	public static final String EMAIL = "email";
 	public static final String CONTACT_NUMBER = "contact_number";
 	public static final String ID_PROOF = "id_proof";
-	public static final String PROOF_OF_VISIT = "proof_of_visit";
-	public static final String REASON_FOR_VISIT = "reason_for_visit";
 	public static final String VISITOR_TYPE = "visitor_type";
 	public static final String CREATED_TS = "created_ts";
 	public static final String UPDATED_TS = "updated_ts";
@@ -53,7 +51,7 @@ public class Visitor {
 	@Column(name = LAST_NAME, nullable = false)
 	private String lastName;
 
-	@Column(name = EMAIL, nullable = false, unique = true)
+	@Column(name = EMAIL, nullable = false)
 	private String email;
 
 	@Column(name = CONTACT_NUMBER, length = 15, nullable = false)
@@ -61,12 +59,6 @@ public class Visitor {
 
 	@Column(name = ID_PROOF, nullable = false)
 	private String idProof;
-
-	@Column(name = PROOF_OF_VISIT)
-	private String placeOfVisit;
-
-	@Column(name = REASON_FOR_VISIT, nullable = false)
-	private String reasonForVisit;
 
 	@Column(name = VISITOR_TYPE)
 	private String visitorType;
