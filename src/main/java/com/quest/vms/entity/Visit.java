@@ -32,13 +32,14 @@ public class Visit {
 	
 	public static final String VISIT_ID = "visit_id";
 	public static final String VISIT_DATE = "visit_date";
+	public static final String CAME_FROM = "cameFrom";
+	public static final String PASS_NUMBER = "passNumber";
 	public static final String CONTACT_PERSON = "contact_person";
 	public static final String TIME_SLOT = "time_slot";
 	public static final String APPROVALSTATUS = "approvalStatus";
 	public static final String ISVISITCOMPLETED = "isVisitCompleted";
 	public static final String PLACE_OF_VISIT = "place_of_visit";
-	public static final String REASON_FOR_VISIT = "reason_for_visit";
-	
+	public static final String REASON_FOR_VISIT = "reason_for_visit";	
 
 	
 	@Id
@@ -58,10 +59,15 @@ public class Visit {
 	
 	@Column(name = PLACE_OF_VISIT)
 	private String placeOfVisit;
+	
+	@Column(name = CAME_FROM)
+	private String cameFrom;
+
+	@Column(name = PASS_NUMBER)
+	private String passNumber;
 
 	@Column(name = REASON_FOR_VISIT, nullable = false)
 	private String reasonForVisit;
-
 
 	@OneToOne(cascade = CascadeType.ALL)
 	private ContactPerson contactPerson;

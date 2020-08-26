@@ -3,6 +3,8 @@ package com.quest.vms.dto;
 import java.util.Date;
 import java.util.List;
 
+import javax.persistence.Column;
+
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import lombok.AllArgsConstructor;
@@ -23,9 +25,10 @@ public class VisitDTO {
 	private Boolean isVisitCompleted;
 	private String placeOfVisit;
 	private String reasonForVisit;
+	private String cameFrom;
+	private String passNumber;
 	
 	private ContactPersonDTO contactPerson;
 	private TimeSlotDTO timeSlot;
 	private List<DeviceDTO> devices;
-
 }
